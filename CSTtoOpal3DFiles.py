@@ -4,7 +4,7 @@ Created on Mon Feb 13 13:50:10 2017
 
 @author: nneveu
 
-Re-order and combine 3D linac files from CST
+ombine 3D linac files from CST
 """
 import sys
 sys.path.append('/Users/nneveu/Desktop/Scripts/3druns')
@@ -12,16 +12,24 @@ import linecache
 #==============================================================================
 # This function combines E and H CST files
 #==============================================================================
-def CSTcombo(efilein, hfilein, ehfileout):
+def CSTcombo(efilein, hfilein, ehfileout, filetype):
     
     num_lines = sum(1 for line in open(efilein))
     #efin = open(efilein, 'r')
     ehout = open(ehfileout, 'w')
     ehout.write('3DDynamic XYZ\n')
-    ehout.write('1300.00\n')
-    ehout.write('-4.6 4.6 46\n')
-    ehout.write('-4.6 4.6 46\n')
-    ehout.write('0.0 120.0 1200\n')
+    if filetype == 'linac':      
+        ehout.write('1300.341684\n')
+        ehout.write('-4.6 4.6 46\n')
+        ehout.write('-4.6 4.6 46\n')
+        ehout.write('0.0 120.0 1200\n')
+    
+    elif filetype == 'gun':
+        ehout.write('1300.151204\n')
+        ehout.write('-2.5 2.5 80\n')
+        ehout.write('-2.5 2.5 80\n')
+        ehout.write('0.0 23.271 376\n')
+
     #Starting at line #3 because CST file has 2 lines of header
     for i in xrange(3, num_lines+1): 
         lineE = linecache.getline(efilein, i)
@@ -87,8 +95,8 @@ def CSTcomboxyz(efilein, hfilein, ehfileout):
 #==============================================================================
 # testing functions
 #==============================================================================
-num_lines = CSTcombo('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargMeshZheng.txt', 'DriveLinac_3D.txt')
-#num_lines = CSTcomboxyz('field_files/e3D_gun_Zheng.txt', 'field_files/h3D_gun_Zheng.txt', 'test.txt')
+num_lines = CSTcombo('field_files/e3D_gun_Zheng.txt', 'field_files/h3D_gun_Zheng.txt', 'DriveGun_3D.txt', 'gun')
+#num_lines = CSTcomboxyz('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargeMeshZheng.txt', 'test.txt', 'linac')
 
 #num_lines = sum(1 for line in open('DriveLinac3D_CosMinusSin.txt'))
 
