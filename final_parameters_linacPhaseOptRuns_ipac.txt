@@ -1,0 +1,207 @@
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight10_database.npy
+steps: 134
+
+Gun Parameters:
+220.544053823
+-54.3094715172
+0.0106929839551
+9.68243565348e-12
+
+Linac Phases: 
+6.14448581935
+-7.06795700174
+-8.28777342303
+-9.45009231712
+-15.9063286372
+0.184314909001
+
+Emittance: 
+23.3444710709
+
+Bunch Length: 
+0.00164547586835
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight1_database.npy
+steps: 148
+
+Gun Parameters:
+211.228773354
+-22.6384649666
+0.0143169254158
+2.00463774538e-12
+
+Linac Phases: 
+-20.5537803979
+-8.8579698758
+2.3080545257
+11.7922054254
+-0.18029021804
+27.2131776407
+
+Emittance: 
+167.345754827
+
+Bunch Length: 
+0.000865762801081
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight2_database.npy
+steps: 208
+
+Gun Parameters:
+220.40161465
+-26.9983290591
+0.0130596279896
+2.00074216741e-12
+
+Linac Phases: 
+-22.7032691123
+-7.53187280402
+-3.43745815638
+-19.6303619645
+-2.74735499628
+9.29000465405
+
+Emittance: 
+108.574256431
+
+Bunch Length: 
+0.000930849096951
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight3_database.npy
+steps: 130
+
+Gun Parameters:
+213.985896839
+-31.6232603327
+0.0132020654482
+3.72634882895e-12
+
+Linac Phases: 
+-27.4364523203
+-19.1169581792
+7.09100400726
+8.08951082077
+-5.36548807548
+-19.5267760959
+
+Emittance: 
+82.5060139728
+
+Bunch Length: 
+0.00101621015821
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight4_database.npy
+steps: 115
+
+Gun Parameters:
+238.429036281
+-33.6888211925
+0.0132165917174
+5.58721899872e-12
+
+Linac Phases: 
+-28.0830922049
+-14.9121981402
+-2.80797579536
+-17.4168564701
+5.54423592708
+-11.8930276672
+
+Emittance: 
+47.6966791367
+
+Bunch Length: 
+0.00114479983567
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight6_database.npy
+steps: 132
+
+Gun Parameters:
+243.772937689
+-33.9697193753
+0.0123213550695
+5.68510051611e-12
+
+Linac Phases: 
+-32.4487176074
+-14.4425825129
+-4.40917197232
+-17.6742556107
+5.92175890976
+-11.4828338441
+
+Emittance: 
+43.3014154357
+
+Bunch Length: 
+0.00118461011142
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight7_database.npy
+steps: 115
+
+Gun Parameters:
+236.656754655
+-39.4213316611
+0.0118863847171
+7.04015872609e-12
+
+Linac Phases: 
+-27.2697289433
+-17.0248501046
+-16.2824616961
+-10.0965342832
+-7.75845241252
+7.16938020115
+
+Emittance: 
+34.3334273386
+
+Bunch Length: 
+0.00127975206794
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight8_database.npy
+steps: 121
+
+Gun Parameters:
+235.700202529
+-43.9855875793
+0.0104640730558
+7.10573644483e-12
+
+Linac Phases: 
+-18.7770582261
+-17.3888514664
+-15.5741742832
+-8.58229133351
+-8.38080714696
+6.30887297341
+
+Emittance: 
+27.8495371696
+
+Bunch Length: 
+0.00142122481881
+
+../../code\OPAL_ipac2017_2Dfiles_linacphase_bobyqa_run_10optvariables_weight9_database.npy
+steps: 112
+
+Gun Parameters:
+236.420618765
+-44.3230404836
+0.00989247144378
+7.10567481396e-12
+
+Linac Phases: 
+-16.7036298492
+-18.1146051614
+-15.6041419605
+-9.57105217615
+-10.2239475334
+6.40500442954
+
+Emittance: 
+26.9923533188
+
+Bunch Length: 
+0.00147915743198
+
