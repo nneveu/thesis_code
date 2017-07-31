@@ -8,89 +8,149 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-sys.path.append('/Users/nneveu/Documents/PythonScripts')
 import myplots as mplt
 
-run = 'check2mAfterKicker'
-
-#myfile1 = 'dipoleKickerM260.stat'
-#myfile2 = 'dipoleKickerM255.stat'
-#myfile = 'kickerScanQstrength1pt8.stat'
-#myfile2 = 'kickerScanQ1Q2-1pt98.stat'
-#statdata = mplt.load(myfile2,59)
+run = 'dipole_test'
 
 #opalfilebase = 'dipoleKickerBaselineK0-0pt012'
+#file1 = mplt.load('optLinac_weight3.stat')
+#file1 = mplt.load('optLinac_weight5_linacon.stat')
+#file2 = mplt.load('optLinac_weight5_linacon.stat')
 
-angledata = mplt.load('dipoleKicker20m.stat')
-#k0data  = mplt.load('dipoleKickerBaselineK0-0pt012.stat', 56)
-#k08psdata = mplt.load('dipoleKicker-10%E.stat', 56)
+file1 = mplt.load('./data/optLinac3Dgun3DLinac.stat')
+file2 = mplt.load('./data/optLinac3Dgun3DLinac.stat')
+
+file1_label = 'weight 3'#'Linac on'#
+file2_label = 'weight 5'#'weight 5'
 
 
-for i in np.arange(2, 3, 1): 
+for i in np.arange(6, 8, 1): 
     
     if i ==1: 
         #Energy Plot
         plt.figure(1)
-        plt.show(block=False) 
-        plt.axis((0, 20, 0, 70))
+        #plt.show(block=False) 
+        #plt.axis((0, 20, 0, 70))
         plt.title( r'Energy Vs. Z' , size=18)
         plt.xlabel(r'z [m]', size=18)
         plt.ylabel(r'$\gamma mc^2$ [MeV]', size=18)
-        plt.plot(angledata['z'], angledata['E'], 'b-', label = 'Baseline')
-        #plt.plot(k08psdata['z'], k08psdata['E'],  'g-', label='-10\% Energy')#,markersize=4, markevery=50)        
-        #plt.plot(k08psdata['z'], k08psdata['E'],  'g-', label='8ps: K0 = -0.12196 [T]',markersize=4, markevery=50)
-        plottitle = 'Energy' +run +'.pdf'
+        plt.plot(file1['z'], file1['E'], 'b-', label = file1_label)
+        plt.yticks(np.arange(0, 70, 5.0))
+        plt.grid('on')
+        plt.plot(file2['z'], file2['E'], 'g--', label = file2_label)
+        plottitle = 'Energy_' +run +'.pdf'
         
     
     elif i ==2:
         #XRMS Plot
         plt.figure(2)
-        plt.show(block=False) 
-        plt.axis((0, 20, 0, 35))
+        #plt.show(block=False) 
+        #plt.axis((0, 20, 0, 45))
         plt.title( r'Beam Size Vs. Z' , size=18)
         plt.xlabel(r'z [m]', size=18)
         plt.ylabel(r'$3\sigma$ [mm]', size=18)
-        plt.plot(angledata['z'], 3*angledata['xrms'], 'b-', label = '3$\sigma_{x/y}$ Baseline')
-        #plt.plot(k08psdata['z'], 3*k08psdata['xrms'],  'g-', label='3$\sigma_{x/y}$ -10\%E',markersize=4, markevery=50)
-        plt.plot(angledata['z'], 3*angledata['yrms'], 'b--')#, label = '3$\sigma_y$')
-        #plt.plot(k08psdata['z'], 3*k08psdata['yrms'],  'g--')#, label='3$\sigma_y$',markersize=4, markevery=50)
+        plt.plot(file1['z'], 3*file1['xrms'], 'b-',  label = file1_label + '- 3$\sigma_{x}$ ')
+        plt.plot(file1['z'], 3*file1['yrms'], 'b--', label = file1_label + '- 3$\sigma_y$')
+        plt.plot(file2['z'], 3*file2['xrms'], 'g-',  label = file2_label + '- 3$\sigma_{x}$ ')
+        plt.plot(file2['z'], 3*file2['yrms'], 'g--', label = file2_label + '- 3$\sigma_y$')
+
 #==============================================================================
 #         plt.plot(dataoff['z'], dataoff['xrms'], 'b-', label = 'M260')
 #         plt.plot(dataon['z'], dataon['xrms'],  'g-', label='M265')
 #==============================================================================
-        plottitle = 'XRMS3sigma' +run +'.pdf'
+        plottitle = 'XRMS3sigma_' +run +'.pdf'
     
     elif i ==3:
         #XEMIT Plot
         plt.figure(3)
-        plt.show(block=False)
-        plt.axis((0.0, 20.0, 50.0, 350)) 
+        #plt.show(block=False)
+        #plt.axis((0.0, 20.0, 0.0, 150)) 
         plt.title( r'Emittance Vs. Z' , size=18) 
         plt.xlabel(r'z [m]', size=18) 
         plt.ylabel(r'$\epsilon_{nx}$ [mm-mrad]', size=18)
-        plt.plot(angledata['z'], angledata['xemit'], 'b-', label = '2.0ps: 2deg Angle')
-        #plt.plot(k08psdata['z'], k08psdata['xemit'],  'g-', label='8.09ps: K0 = -0.12196 [T]',markersize=4, markevery=50)
+        plt.plot(file1['z'], file1['xemit'], 'b-', label = file1_label)
+        #plt.plot(file2['z'], file2['xemit'], 'g-', label = file2_label)
+
 #==============================================================================
 #         plt.plot(dataoff['z'], dataoff['xemit'], 'b-', label = 'M260')
 #         plt.plot(dataon['z'], dataon['xemit'],  'g-', label='M265')
 #==============================================================================
-        plottitle = 'Emittance'+run+'.pdf'
+        plottitle = 'Emittance_'+run+'.pdf'
         
     elif i ==4:
-        #XEMIT Plot
-        plt.figure(3)
-        plt.show(block=False)
-        plt.axis((0.0, 20.0, 0, 3)) 
+        #Bunch Length Plot
+        plt.figure(4)
+        #plt.show(block=False)
+        #plt.axis((0.0, 20.0, 0, 3)) 
         plt.title( r'Bunch Length' , size=18) 
         plt.xlabel(r'z [m]', size=18) 
         plt.ylabel(r'$\sigma_{z}$ [mm]', size=18)
-        plt.plot(angledata['z'], angledata['zrms'], 'b-', label = '2.0ps: 2deg Angle')
-        #plt.plot(k08psdata['z'], k08psdata['zrms'],  'g-', label='8.09ps: K0 = -0.12196 [T]',markersize=4, markevery=50)
+        plt.plot(file1['z'], file1['zrms'], 'b-', label = file1_label)
+        plt.plot(file2['z'], file2['zrms'], 'g-', label = file2_label)
 #==============================================================================
 #         plt.plot(dataoff['z'], dataoff['xemit'], 'b-', label = 'M260')
 #         plt.plot(dataon['z'], dataon['xemit'],  'g-', label='M265')
 #==============================================================================
-        plottitle = 'BunchLength'+run+'.pdf'
+        plottitle = 'BunchLength_'+run+'.pdf'
+        
+
+    elif i ==5:
+        #Energy Spread
+        plt.figure(5)
+        #plt.show(block=False)
+        #plt.axis((0.0, 20.0, 0, 0.06)) 
+        plt.title( r'Energy Spread' , size=18) 
+        plt.xlabel(r'z [m]', size=18) 
+        plt.ylabel(r'dE/E [mm]', size=18)
+        plt.plot(file1['z'], file1['dE']/file1['E'], 'b-', label = file1_label)
+        plt.plot(file2['z'], file2['dE']/file2['E'], 'g-', label = file2_label)
+
+        plottitle = 'energySpread_'+run+'.pdf'
+        
+    elif i ==6: 
+	#Bz on axis 
+        plt.figure(6)
+        #plt.show(block=False)
+        #plt.axis((0.0, 15.0, -70,10)) 
+        plt.title( r'Magnetic Field' , size=18)
+        plt.xlabel(r'z [m]', size=18)
+        plt.ylabel(r'Bz [T]', size=18)
+        #plt.yticks(np.arange( -70,0, 5.0))
+        plt.grid('on')
+
+        plt.plot(file1['z'], file1['Bz'], 'b-', label = file1_label)
+        #plt.plot(file2['z'], file2['zrms'], 'g-', label = file2_label)
+        plottitle = 'Bz_'+run+'.pdf'
+
+    elif i ==7:
+        #By on axis 
+        plt.figure(7)
+        #plt.show(block=False)
+        #plt.axis((0.0, 15.0, -70,10)) 
+        plt.title( r'Magnetic Field' , size=18)
+        plt.xlabel(r'z [m]', size=18)
+        plt.ylabel(r'By [T]', size=18)
+        #plt.yticks(np.arange( -70,0, 5.0))
+        plt.grid('on')
+
+        plt.plot(file1['z'], file1['By'], 'b-', label = file1_label)
+        #plt.plot(file2['z'], file2['zrms'], 'g-', label = file2_label)
+        plottitle = 'By_'+run+'.pdf'
+    
+    elif i ==8:
+        #Ez on axis
+        plt.figure(8)
+        #plt.show(block=False)
+        #plt.axis((0.0, 15.0, -70,10)) 
+        plt.title( r'Electric Field' , size=18) 
+        plt.xlabel(r'z [m]', size=18) 
+        plt.ylabel(r'MV/m', size=18)
+        plt.yticks(np.arange( -70,0, 5.0))        
+        plt.grid('on')
+        
+        plt.plot(file1['z'], file1['Ez'], 'b-', label = file1_label)
+        #plt.plot(file2['z'], file2['zrms'], 'g-', label = file2_label)
+        plottitle = 'Ez_'+run+'.pdf'
 #==============================================================================
 #     for j in np.arange(2, 2, 1): 
 #     
@@ -100,25 +160,6 @@ for i in np.arange(2, 3, 1):
 #         #myopalfile = opalfilebase + s + '.stat'
 #         #data = mplt.load(myopalfile, 56)
 #     
-#         if i ==1: 
-#             #Energy Plots
-#             plt.plot(data['z'], data['E'],  '-')#, label=s,markersize=4, markevery=50)
-#             plt.legend(loc=4)  
-#             
-#         elif i ==2:   
-#             #XRMS Plots
-#             plt.plot(data['z'], 3*data['xrms'], label= '$\sigma_x$') 
-#             plt.plot(data['z'], 3*data['yrms'], label= '$\sigma_y$')#, Q2 = '+str(j)) 
-#             #plt.plot((11.0, 16.0), (25, 25), 'k--', label='25mm = Drift Radius')
-#             plt.plot((15.3, 15.3), (0.0, 15.0), 'k-')
-#             plt.plot((16.0, 16.0), (0.0, 15.0), 'k-')
-#             plt.plot((15.3, 16.0), (15.0, 15.0), 'k-', label=r'Kicker')
-#             plt.legend(loc='best')
-#             
-#         elif i ==3: 
-#             #XEMIT Plots
-#             plt.plot(data['z'],data['xemit'])#, label=s)
-#             plt.legend(loc='best') 
 #==============================================================================
     
     plt.legend(loc='best')
