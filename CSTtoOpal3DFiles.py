@@ -12,23 +12,11 @@ import linecache
 #==============================================================================
 # This function combines E and H CST files
 #==============================================================================
-def CSTcombo(efilein, hfilein, ehfileout, filetype):
+def CSTcombo(efilein, hfilein, ehfileout):
     
     num_lines = sum(1 for line in open(efilein))
     #efin = open(efilein, 'r')
     ehout = open(ehfileout, 'w')
-    ehout.write('3DDynamic XYZ\n')
-    if filetype == 'linac':      
-        ehout.write('1300.341684\n')
-        ehout.write('-4.6 4.6 46\n')
-        ehout.write('-4.6 4.6 46\n')
-        ehout.write('0.0 120.0 1200\n')
-    
-    elif filetype == 'gun':
-        ehout.write('1300.151204\n')
-        ehout.write('-2.5 2.5 80\n')
-        ehout.write('-2.5 2.5 80\n')
-        ehout.write('0.0 23.271 376\n')
 
     #Starting at line #3 because CST file has 2 lines of header
     for i in xrange(3, num_lines+1): 
@@ -92,11 +80,90 @@ def CSTcomboxyz(efilein, hfilein, ehfileout):
                     
                     ehout.write('%-10s %-10s %-10s %-20s %-20s %-20s %-20s %-20s %-20s\n' % (x, y, z, exreal, eyreal, ezreal, hximag, hyimag, hzimag))               
     return num_lines
+
+
+def reorderCST(EHcombofile, reorderedFile, filetype):
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #Step 2: 
+    #	Write Header info
+    #	This info needs to be adjusted by hand
+    reorder = open(reorderedFile, 'w')
+    reorder.write('3DDynamic XYZ\n')
+    if filetype == 'linac':      
+        reorder.write('1300.341684\n')
+        reorder.write('-4.6 4.6 46\n')
+        reorder.write('-4.6 4.6 46\n')
+        reorder.write('0.0 120.0 1200\n')
+        
+        print('linac')
+        #Number of grid points in each dimension
+        #These need to be adjusted by hand
+        nx = 46 +1
+        ny = 46 +1
+        nz = 1200 +1
+    
+    elif filetype == 'gun':
+        print('gun')
+        #Number of grid points in each dimension
+        #These need to be adjusted by hand
+        reorder.write('1300.151204\n')
+        reorder.write('-2.5 2.5 80\n')
+        reorder.write('-2.5 2.5 80\n')
+        reorder.write('0.0 23.271 376\n')
+        
+        nx = 80 +1
+        ny = 80 +1
+        nz = 376 +1
+        
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #Step 3: 
+    #	Reorder E and H values
+    numlines = sum(1 for line in open(EHcombofile))
+    
+    #Checking file size is correct
+    if numlines != nx*ny*nz :
+    	print('Not the right number of lines!',numlines, nx*ny*nz  )
+    
+    # This is the right order to convert from XYZ to ZYX format
+    print(nx, ny, nz)
+    dx = nx*ny
+    dy = ny
+    dz = 1
+#==============================================================================
+#     for k in xrange(0,nx):
+#     	dlz = k*dz
+#     
+#     	for j in xrange(0, ny):
+#     		dly = j*dy
+#     
+#     		for i in xrange(0,nz):
+#     			dlx = i*dx
+#==============================================================================
+    for k in xrange(0,nx):
+        dlz = k*dz
+
+        for j in xrange(0, ny):
+            dly = j*dy
+
+            for i in xrange(0,nz):
+               dlx = i*dx
+               zline = dlx + dly + dlz + 1
+               reorder.write(linecache.getline(EHcombofile, zline))
+
+    reorder.close()
 #==============================================================================
 # testing functions
 #==============================================================================
-num_lines = CSTcombo('field_files/e3D_gun_Zheng.txt', 'field_files/h3D_gun_Zheng.txt', 'DriveGun_3D.txt', 'gun')
-#num_lines = CSTcomboxyz('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargeMeshZheng.txt', 'test.txt', 'linac')
+#==============================================================================
+# num_lines_gun = CSTcombo('field_files/e3D_gun_Zheng.txt', 'field_files/h3D_gun_Zheng.txt', 'hold1.txt')
+# #num_lines = CSTcomboxyz('field_files/e3D_gun_Zheng.txt', 'field_files/h3D_gun_Zheng.txt', 'test.txt')
+# reorderCST('hold.txt', 'DriveGun_3D.txt', 'gun')
+#==============================================================================
+
+num_lines_linac = CSTcombo('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargeMeshZheng.txt', 'hold2.txt')
+#num_lines = CSTcomboxyz('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargeMeshZheng.txt', 'test.txt')
+reorderCST('hold2.txt', 'DriveLinac_3D_2.txt', 'linac')
+
 
 #num_lines = sum(1 for line in open('DriveLinac3D_CosMinusSin.txt'))
 
