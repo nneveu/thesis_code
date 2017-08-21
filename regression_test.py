@@ -100,8 +100,8 @@ axarr[0, 1].axis([0.0,4.0,0,14])
 axarr[0, 1].legend(loc='upper right')
 
 
-axarr[1, 1].plot(dataopal1['z'], dataopal1['E']+0.511, '--', label = 'OPAL V1.4')
-axarr[1, 1].plot(dataopa2['z'], dataopal2['E']+0.511, '--', label = 'OPAL V1.6')
+axarr[1, 1].plot(dataopal1['z'], dataopal1['E']+0.511, 'g-', label = 'OPAL V1.4')
+axarr[1, 1].plot(dataopal2['z'], dataopal2['E']+0.511, '--', label = 'OPAL V1.6')
 axarr[1, 1].set_title('Energy ',fontsize=18)
 axarr[1, 1].set_xlabel('z [m]',fontsize=18)
 axarr[1, 1].set_ylabel('$\gamma mc^2$ [MeV]',fontsize=20)
