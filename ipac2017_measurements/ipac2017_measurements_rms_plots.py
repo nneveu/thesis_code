@@ -7,8 +7,8 @@ import matplotlib.backends.backend_pdf
 plt.rc('text', usetex=True)
 plt.rc('font',family='serif')
 
-runs =[0,1,5,7,9,10] 
-
+#runs =[0,1,5,7,9,10] 
+runs = [5,7,9,10]
 
 for w in runs:
     #before = glob.glob('/home/nicole/Documents/thesis_code/ipac2017_measurements/*w1_*.stat')
@@ -35,7 +35,7 @@ for w in runs:
     plt.title("Emittance")
     plt.xlabel("z [m]")
     plt.ylabel("xemit [um]")
-    if int(w) < 7:
+    if int(w) < 5:
         plt.axis([0.0,20.0,0.0,450])
     else:
         plt.axis([0.0,20.0,0.0,100])
