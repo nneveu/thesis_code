@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-matplotlib.rc('font',family='Times New Roman')
+#matplotlib.rc('font',family='Times New Roman')
 matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('ytick', labelsize=18) 
 
@@ -19,7 +19,10 @@ import myplots as mplt
 
 
 dataopal1 = mplt.load('1nCR0pt75LaserAstraM273.stat')
-dataopal2 = mplt.load('RFphotoinjector_v1.6.stat')
+dataopal2 = mplt.load('RFphotoinjector.stat')
+
+v1 = str(1.4)
+v2 = str(1.9)
 
 # Four axes, returned as a 2-d array
 f, axarr = plt.subplots(2, 2, figsize=(7.5,6))
@@ -71,8 +74,8 @@ f.subplots_adjust(wspace=.4)
 # plt.savefig('paperfigAstrainGungrid46.png', format='png', dpi=1000, bbox_inches='tight')
 #==============================================================================
 
-axarr[0, 0].plot(dataopal1['z'], dataopal1['xrms'], 'g-', label = 'OPAL V1.4')
-axarr[0, 0].plot(dataopal2['z'], dataopal2['xrms'], '--', label = 'OPAL V1.6')
+axarr[0, 0].plot(dataopal1['z'], dataopal1['xrms'], 'g-', label = 'OPAL V'+v1)
+axarr[0, 0].plot(dataopal2['z'], dataopal2['xrms'], '--', label = 'OPAL V'+v2)
 axarr[0, 0].set_title('Transverse Beam Size',fontsize=18)
 axarr[0, 0].set_xlabel('z [m]',fontsize=18)
 axarr[0, 0].set_ylabel(r'$x_{rms}$ [mm]',fontsize=20)
@@ -80,8 +83,8 @@ axarr[0, 0].set_xticks(np.arange(0.0, 5.0, 1.0) )
 axarr[0, 0].axis([0.0,4.0,0,3.0])
 axarr[0, 0].legend(loc='best')
 
-axarr[1, 0].plot(dataopal1['z'], dataopal1['zrms'], 'g-',  label = 'OPAL V1.4')
-axarr[1, 0].plot(dataopal2['z'], dataopal2['zrms'], '--',  label = 'OPAL V1.6')
+axarr[1, 0].plot(dataopal1['z'], dataopal1['zrms'], 'g-',  label = 'OPAL V'+v1)
+axarr[1, 0].plot(dataopal2['z'], dataopal2['zrms'], '--',  label = 'OPAL V'+v2)
 axarr[1, 0].set_title('Bunch Length',fontsize=18)
 axarr[1, 0].set_xlabel('z [m]',fontsize=18)
 axarr[1, 0].set_ylabel('$z_{rms}$ [mm]',fontsize=20)
@@ -89,8 +92,8 @@ axarr[1, 0].set_xticks(np.arange(0.0, 5.0, 1.0) )
 axarr[1, 0].axis([0.0,4.0,0,2.5])
 axarr[1, 0].legend(loc='best')
 
-axarr[0, 1].plot(dataopal1['z'], dataopal1['xemit'], 'g-', label = 'OPAL V1.4')
-axarr[0, 1].plot(dataopal2['z'], dataopal2['xemit'], '--', label = 'OPAL V1.6')
+axarr[0, 1].plot(dataopal1['z'], dataopal1['xemit'], 'g-', label = 'OPAL V'+v1)
+axarr[0, 1].plot(dataopal2['z'], dataopal2['xemit'], '--', label = 'OPAL V'+v2)
 axarr[0, 1].set_title('Normalized Emittance',fontsize=18)
 axarr[0, 1].set_xlabel('z [m]',fontsize=18)
 axarr[0, 1].set_ylabel('$\epsilon_{nx}$ [$\mu$m]',fontsize=20)
@@ -100,8 +103,8 @@ axarr[0, 1].axis([0.0,4.0,0,14])
 axarr[0, 1].legend(loc='upper right')
 
 
-axarr[1, 1].plot(dataopal1['z'], dataopal1['E']+0.511, 'g-', label = 'OPAL V1.4')
-axarr[1, 1].plot(dataopal2['z'], dataopal2['E']+0.511, '--', label = 'OPAL V1.6')
+axarr[1, 1].plot(dataopal1['z'], dataopal1['E']+0.511, 'g-', label = 'OPAL V'+v1)
+axarr[1, 1].plot(dataopal2['z'], dataopal2['E']+0.511, '--', label = 'OPAL V'+v2)
 axarr[1, 1].set_title('Energy ',fontsize=18)
 axarr[1, 1].set_xlabel('z [m]',fontsize=18)
 axarr[1, 1].set_ylabel('$\gamma mc^2$ [MeV]',fontsize=20)
@@ -115,4 +118,14 @@ plt.savefig('./regtest.pdf', format='pdf', dpi=1000, bbox_inches='tight')
 #plt.setp([a.get_xticklabels() for a in axarr[0, :]], visible=False)
 #plt.setp([a.get_yticklabels() for a in axarr[:, 1]], visible=False)
 
+plt.figure()
+plt.plot(dataopal1['z'], dataopal1['Bz'], label='OPAL V'+v1)
+plt.plot(dataopal2['z'], dataopal2['Bz'], '*', markevery=200, label='OPAL V'+v2)
+plt.legend()
 
+plt.figure()
+plt.plot(dataopal1['z'], dataopal1['Ez'], label='OPAL V'+v1)
+plt.plot(dataopal2['z'], dataopal2['Ez'], '*', markevery=200, label='OPAL V'+v2)
+plt.legend()
+
+plt.show()
