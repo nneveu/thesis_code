@@ -93,14 +93,18 @@ def loadgpt(myfile):
 
 def load(myfile):
 
-    lookfor = "OPAL"
+    lookfor = "OPAL 1."
     
     with open(myfile, "r") as parsefile:
         for num, line in enumerate(parsefile, 1):
-            if lookfor in line: 
-                skip = num
+            if lookfor in line:
+                if line.split('.')[1] > 6: 
+                    skip = num+1
+                else:
+                    skip = num
                 break   
 
+    print('line num:',num)
     data = np.loadtxt(myfile, skiprows=skip)
 
     mm = 10**3
@@ -127,28 +131,40 @@ def load(myfile):
     ymean = data[:,15]*mm
     zmean = data[:,16]
     
-    xmax = data[:,17]*10**3
-    ymax = data[:,18]*10**3
-    zmax = data[:,19]
+    if skip < 100:
+        xmax = data[:,17]*10**3
+        ymax = data[:,18]*10**3
+        zmax = data[:,19]
     
-    xpx = data[:,20] #Units of 1
-    ypy = data[:,21]
-    zpz = data[:,22]
+        xpx = data[:,20] #Units of 1
+        ypy = data[:,21]
+        zpz = data[:,22]
 
-    Bx = data[:,35] #Units of T
-    By = data[:,36]
-    Bz = data[:,37]
+        Bx = data[:,35] #Units of T
+        By = data[:,36]
+        Bz = data[:,37]
 
-    Ex = data[:,38] #Units of MV/m
-    Ey = data[:,39]
-    Ez = data[:,40] 
+        Ex = data[:,38] #Units of MV/m
+        Ey = data[:,39]
+        Ez = data[:,40] 
 
-    dE = data[:,47] #Units of MeV
+        dE = data[:,47] #Units of MeV
+    
+    elif skip > 100:
+        Bx = data[:,33] #Units of T
+        By = data[:,34]
+        Bz = data[:,35]
 
-    return ({'t':t, 'z':z, 'numpart':numpart, 'E':E, 'dE':dE,'xrms':xrms, 'yrms':yrms, 'zrms':zrms, 
+        Ex = data[:,36] #Units of MV/m
+        Ey = data[:,37]
+        Ez = data[:,38]
+    else:
+        print('problem with stat order')
+ 
+    return ({'t':t, 'z':z, 'numpart':numpart, 'E':E, 'xrms':xrms, 'yrms':yrms, 'zrms':zrms, 
     'pxrms':pxrms, 'pyrms':pyrms, 'pzrms':pzrms, 'xemit':xemit, 'yemit':yemit, 'zemit':zemit,
-    'xpx':xpx, 'ypy':ypy, 'zpz':zpz, 'xmean':xmean, 'ymean': ymean, 'zmean':zmean, 
-    'xmax':xmax, 'ymax':ymax, 'zmax':zmax,
+    #'xpx':xpx, 'ypy':ypy, 'zpz':zpz, 'xmean':xmean, 'ymean': ymean, 'zmean':zmean, 
+    #'xmax':xmax, 'ymax':ymax, 'zmax':zmax, 'dE:dE,
     'Bx':Bx, 'By':By, 'Bz':Bz, 'Ex':Ex, 'Ey':Ey, 'Ez':Ez})
 #==============================================================================
 # plotformat function does the following:

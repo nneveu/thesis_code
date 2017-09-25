@@ -8,14 +8,16 @@ plt.rc('text', usetex=True)
 plt.rc('font',family='serif')
 
 #runs =[0,1,5,7,9,10] 
-runs = [5,7,9,10]
+runs = [0]
 
 for w in runs:
-    #before = glob.glob('/home/nicole/Documents/thesis_code/ipac2017_measurements/*w1_*.stat')
-    before = glob.glob('/home/nicole/Documents/thesis_code/ipac2017_measurements/*_w'+str(w)+'_*.stat')
+    before = glob.glob('/home/nicole/Documents/thesis_code/ipac2017_measurements/*easy*.stat')
+    #before = glob.glob('/home/nicole/Documents/thesis_code/ipac2017_measurements/*_'+str(w)+'_*.stat')
     #after  = glob.glob('/home/nicole/Documents/thesis_code/data/ipac2017/*weight*.stat')
     #fn = '/home/nicole/Documents/thesis_code/data/optLinac_weight0.stat'
-    plotfn = './beamsizes_weight'+str(w)+'.pdf'
+    #plotfn = './beamsizes_weight'+str(w)+'.pdf'
+    plotfn = './beamsizes_easy_exp.pdf'
+
     '''
     plt.axvline(x=3.1)
     plt.axvline(x=6.377)
@@ -35,10 +37,13 @@ for w in runs:
     plt.title("Emittance")
     plt.xlabel("z [m]")
     plt.ylabel("xemit [um]")
-    if int(w) < 5:
+    '''
+    if (int(w) < 5):
         plt.axis([0.0,20.0,0.0,450])
     else:
         plt.axis([0.0,20.0,0.0,100])
+    '''
+    plt.axis([0.0,20.0,0.0,150])
     plt.grid('on')
 
     fig3, ax3 = plt.subplots()
@@ -55,7 +60,8 @@ for w in runs:
 
     for fn in before: 
         print(fn)
-        legend = (fn.split('_')[4]).split('.')[0]
+        legend = fn.split('_')[8]
+        #legend = (fn.split('_')[4]).split('.')[0]
         #print legend
         parser = SddsReader(fn)                                                                                  
         #x = []

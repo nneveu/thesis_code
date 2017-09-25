@@ -28,11 +28,11 @@ ave_background = average_images(di_background)
 #Subtract background
 (dx, dy, Nframes, image_array) = readimage(yag1)
 #print "Dx,Dy,NFrames= ",dx,dy,Nframes
-s = similarity_check(image_array)
-print s
+#s = similarity_check(image_array)
+#print s
 di_images = difilter(image_array)
-no_background_images = background_subtraction(di_images)
-#ave_image = average_images(no_background_images) 
+ave_image = average_images(di_images) 
+no_background_images = background_subtraction(di_images, ave_background)
 
 #View images
 #ir.view_each_frame(image_array)
