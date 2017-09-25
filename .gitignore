@@ -1,2 +1,8 @@
 *.pyc
 *.pdf
+*.dat
+*.sdds
+*.h5
+*.stat
+*.out
+*.png
