@@ -25,10 +25,10 @@ def current_to_bfield(current):
     bfield = (180.9708*current - 7.2053)*10**-4
     return bfield
 
-def counts_to_energy_calc(rho, counts):
+def counts_to_energy(rho, counts):
     i = counts_to_current(counts)    
     bfield = current_to_bfield(i)
-    energy = (bfield*rho)/3.3356
+    energy = ((bfield*rho)/3.3356)*10**3
     return energy    
 
 def total_energy(momentum):
@@ -48,24 +48,29 @@ mean2       = np.mean([10054,9921,9968,9926])
 mean3       = np.mean([14072,14083])
 mean3_highq = np.mean([13472,13792])
 
-gun           = current_to_bfield(counts_to_current(1472.0))
-gun_l1l2      = current_to_bfield(counts_to_current(mean1))
-gun_l1l2_l3l5 = current_to_bfield(counts_to_current(mean2))
-gun_l1_to_l6  = current_to_bfield(counts_to_current(mean3))
+gun           = counts_to_energy(rho, 1472.0)#current_to_bfield(counts_to_current(1472.0))
+gun_l1l2      = counts_to_energy(rho, mean1)#current_to_bfield(counts_to_current(mean1))
+gun_l1l2_l3l5 = counts_to_energy(rho, mean2)#current_to_bfield(counts_to_current(mean2))
+gun_l1_to_l6  = counts_to_energy(rho, mean3)#current_to_bfield(counts_to_current(mean3))
+high_q_energy = counts_to_energy(rho, mean3_highq)
 
-momentum = ((gun*rho)/3.3356)*10**3
 
-print 'gun b', gun
-print 'momentum', momentum
+e1 = total_energy(gun)
+e2 = total_energy(gun_l1l2)
+e3 = total_energy(gun_l1l2_l3l5)
+e4 = total_energy(gun_l1_to_l6)
+e5 = total_energy(high_q_energy)
 
-total_e = total_energy(momentum)
+
+
+#momentum = ((gun*rho)/3.3356)*10**3
+#print 'gun b', gun
+#print 'momentum', momentum
+#total_e = total_energy(momentum)
 
 
 #print 'direct energy', counts_to_energy_calc(rho, 1472.0)*10**3
-
-#print('test current',test)
 #print('recorded current', current[1])
-
 #plt.plot(counts, current)
 #plt.show()
 
