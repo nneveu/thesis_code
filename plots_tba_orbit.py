@@ -27,9 +27,13 @@ def orbit_files(origfile, centerfile, offaxisfile):
     f3.close()
 
 
-orbit_files('tba_orbit_67.2MeV.dat', 'tba_center_orbit_67.2MeV.dat', 'tba_offaxis_orbit_67.2MeV.dat')
-data1 = np.loadtxt('tba_center_orbit_67.2MeV.dat', skiprows=2)
-data2 = np.loadtxt('tba_offaxis_orbit_67.2MeV.dat', skiprows=2)
+data = 'tba-trackOrbit_65MeV.dat'
+center = 'tba_center_orbit_65MeV.dat'
+offaxis = 'tba_offaxis_orbit_65MeV.dat'
+
+orbit_files(data, center, offaxis)
+data1 = np.loadtxt(center, skiprows=2)
+data2 = np.loadtxt(offaxis, skiprows=2)
 
 centerz = data1[:,0]
 offaxisz= data2[:,0]
