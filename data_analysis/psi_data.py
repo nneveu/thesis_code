@@ -45,7 +45,7 @@ no_background_images = background_subtraction(ave_image, ave_background)
 #di_background = difilter(fiducial_array)
 #ave_fiducial = average_images()
 #view_each_frame(fiducial_array)
-no_beam = remove_beam(no_background_images, percent_threshold=0.2)
-#yag2_mm_pixel = fiducial_calc(no_beam)#no_background_images)#ave_fiducial)
-#print yag2_mm_pixel 
+no_beam = remove_beam(no_background_images, percent_threshold=0.05)
+yag2_mm_pixel = fiducial_calc(no_beam)#no_background_images)#ave_fiducial)
+print yag2_mm_pixel 
 
