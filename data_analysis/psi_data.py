@@ -1,4 +1,4 @@
-from imageReader import readimage, difilter, view_each_frame, average_images, background_subtraction, similarity_check
+from imageReader import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -12,6 +12,8 @@ yag1 = './gun_L1-L6_YAG1_FWHM1pt5_M185_R-_GPhase-20_09-22-2017.dat'
 yag1_background = './gun_L1-L6_YAG1_FWHM1pt5_M185_R-_GPhase-20_background_09-22-2017.dat' 
 
 grasshopper = 'gun_L1-L6_YAG7_FWHM1pt5_M185_R-_GPhase-20_slit_29800_09-22-2017_Grasshopper3 GS3-PGE-23S6M_16376365_img.dat' 
+
+yag2_fiducial = './yag2_fiducial.dat'
 
 #Load background images
 #Deinterlace images with median filter
@@ -32,11 +34,18 @@ ave_background = average_images(di_background)
 #print s
 di_images = difilter(image_array)
 ave_image = average_images(di_images) 
-no_background_images = background_subtraction(di_images, ave_background)
+no_background_images = background_subtraction(ave_image, ave_background)
 
+#########ave_no_back = average_images(no_background_images)
 #View images
-#ir.view_each_frame(image_array)
+#view_each_frame(ave_no_back)
 
-
-
+#Calculating fiducial
+#(fx, fy, fNframes, fiducial_array) = readimage(no_background_images)#yag2_fiducial)
+#di_background = difilter(fiducial_array)
+#ave_fiducial = average_images()
+#view_each_frame(fiducial_array)
+no_beam = remove_beam(no_background_images, percent_threshold=0.2)
+#yag2_mm_pixel = fiducial_calc(no_beam)#no_background_images)#ave_fiducial)
+#print yag2_mm_pixel 
 
