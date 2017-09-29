@@ -8,7 +8,7 @@ from glob import glob
 #==============================================================================
 fiducial_files = glob('./images/fiducials/yag*fiducial.dat')
 print fiducial_files
-fiducial = {'yag1':0}
+fiducial = {}
 
 for f in fiducial_files:
     key = (f.split('_')[0]).split('/')[-1]
@@ -26,12 +26,21 @@ for f in fiducial_files:
         #no_background = background_subtraction(ave_fid, ave_background)        
         #no_beam = remove_beam(no_background, percent_threshold=0.05) 
         #fiducial[key] = fiducial_calc(no_beam)
-        fiducial[key] = 0#np.load('yag1_fiducial.npy')['yag1']
+        fiducial[key] = (np.load('yag1_fiducial.npy').flatten())[0]['yag1']
         #np.save('psi_fiducials.npy',fiducial)
 
-    else: 
+    elif key == 'yag7': 
+        fiducial[key] = fiducial_calc(ave_fid, min_r=0.18, max_r=0.2)
+
+    elif key =='yagCTR':
+        fiducial[key] = fiducial_calc(ave_fid, YAG_D=50.038) 
+    else:
         fiducial[key] = fiducial_calc(ave_fid)
-        np.save('psi_fiducials.npy',fiducial)
+
+    np.save('psi_fiducials.npy', fiducial)
+
+
+
 
 #Load background images
 #Deinterlace images with median filter
