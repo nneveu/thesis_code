@@ -65,7 +65,7 @@ ave_background = average_images(di_background)
 (dx, dy, Nframes, image_array) = readimage(yag)
 #print "Dx,Dy,NFrames= ",dx,dy,Nframes
 #Select only images with certain charge
-charge_images = select_on_charge(image_array, charge_array, 31.0, 29.0)
+charge_images, n_images = select_on_charge(image_array, charge_array, 31.0, 29.0)
 #print np.shape(charge_images)
 #Apply median filter to all frames
 di_images = difilter(charge_images)
@@ -75,11 +75,24 @@ no_background_images = background_subtraction(di_images, ave_background)
 #ave_no_back = average_images(no_background_images)
 
 #Starting to find fits
-fitx, fity = fit(no_background_images, dx, dy)
-plt.figure(100)
-plt.plot(fitx)
-plt.show()
+fiducials    = np.load('psi_fiducials.npy').flatten()
+sigmax   = np.zeros((n_images))
+sigmay   = np.zeros((n_images))
 
+for n in range(0,n_images):
+    raw_x, raw_y = raw_data_curves(no_background_images[:,:,n], dx, dy)
+    x_axis, sigmax[n] = fit_data(raw_y, fiducials[0]['yag1'])
+    x_axis, sigmay[n] = fit_data(raw_y, fiducials[0]['yag1'])
+print sigmax, sigmay
+
+#print x_axis
+
+#plt.figure(100)
+#plt.plot(x_axis, raw_x)
+#plt.show()
+
+#print len(raw_x)
+#print len(raw_y)
 
 #s = similarity_check(image_array)
 #print s
