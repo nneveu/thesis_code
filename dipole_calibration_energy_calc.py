@@ -61,13 +61,10 @@ e3 = total_energy(gun_l1l2_l3l5)
 e4 = total_energy(gun_l1_to_l6)
 e5 = total_energy(high_q_energy)
 
-
-
 #momentum = ((gun*rho)/3.3356)*10**3
 #print 'gun b', gun
 #print 'momentum', momentum
 #total_e = total_energy(momentum)
-
 
 #print 'direct energy', counts_to_energy_calc(rho, 1472.0)*10**3
 #print('recorded current', current[1])

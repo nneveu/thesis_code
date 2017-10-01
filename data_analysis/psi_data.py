@@ -6,6 +6,9 @@ from glob import glob
 #==============================================================================
 # Main, calling functions    
 #==============================================================================
+
+#The following code was used to find fiducial
+"""
 fiducial_files = glob('./images/fiducials/yag*fiducial.dat')
 print fiducial_files
 fiducial = {}
@@ -38,65 +41,58 @@ for f in fiducial_files:
         fiducial[key] = fiducial_calc(ave_fid)
 
     np.save('psi_fiducials.npy', fiducial)
-
-
-
+"""
+#The following code  is used to do charge cut off
+# and analyize images
+ict_file_sdds = './charge/gun_L1-L6_YAG1_FWHM1pt5_M185_R-_GPhase-20_09-22-2017LC584AL.sdds'
+yag_background = './images/gun_L1-L6_YAG1_FWHM1pt5_M185_R-_GPhase-20_background_09-22-2017.dat'
+yag = './images/gun_L1-L6_YAG1_FWHM1pt5_M185_R-_GPhase-20_09-22-2017.dat'
+ 
+#SDDS
+volts_array, cal = sdds_to_volts_array(ict_file_sdds)
+charge_array, scaled_volts = ict_charge(volts_array, data_type='sdds',cal_array=cal)
+#plot_ict_curves(scaled_volts, cal)
 
 #Load background images
+(bx, by,b_Nframes, background_array) = readimage(yag_background)
 #Deinterlace images with median filter
-#Average background into one image
-###########(bx, by,b_Nframes, background_array) = readimage(yag1_background)
 #Note, doing filter first removes more noise
-###########di_background  = difilter(background_array)
-#ave_background = average_images(background_array)#di_background)
-###########ave_background = average_images(di_background)
-
+di_background  = difilter(background_array)
+#Average background into one image 
+ave_background = average_images(di_background)
 
 #Load images
-#Apply median filter to all frames
-#Subtract background
-###########3(dx, dy, Nframes, image_array) = readimage(yag1)
+(dx, dy, Nframes, image_array) = readimage(yag)
 #print "Dx,Dy,NFrames= ",dx,dy,Nframes
+#Select only images with certain charge
+charge_images = select_on_charge(image_array, charge_array, 31.0, 29.0)
+#print np.shape(charge_images)
+#Apply median filter to all frames
+di_images = difilter(charge_images)
+#Subtract background
+no_background_images = background_subtraction(di_images, ave_background)
+#view_each_frame(no_background_images)
+#ave_no_back = average_images(no_background_images)
+
+#Starting to find fits
+fitx, fity = fit(no_background_images, dx, dy)
+plt.figure(100)
+plt.plot(fitx)
+plt.show()
+
+
 #s = similarity_check(image_array)
 #print s
-##############di_images = difilter(image_array)
-##############ave_image = average_images(di_images) 
-##############no_background_images = background_subtraction(ave_image, ave_background)
-
-#########ave_no_back = average_images(no_background_images)
-#View images
-#view_each_frame(ave_no_back)
-
-#Calculating fiducial
-#(fx, fy, fNframes, fiducial_array) = readimage(no_background_images)#yag2_fiducial)
-#di_background = difilter(fiducial_array)
-#ave_fiducial = average_images()
-#view_each_frame(fiducial_array)
-############no_beam = remove_beam(no_background_images, percent_threshold=0.05)
-############yag2_mm_pixel = fiducial_calc(no_beam)#no_background_images)#ave_fiducial)
-
-############print yag2_mm_pixel 
-
 
 #------------------------
 #Calc charge 
-#ict_file = './charge/gun_L1-L6_YAG6_FWHM1pt5_M250_R8pt5_GPhase-20_09-20-2017LC584AL.sdds'
+#ict_file_sdds = './charge/gun_L1-L6_YAG6_FWHM1pt5_M250_R8pt5_GPhase-20_09-20-2017LC584AL.sdds'
+#ict_file_csv = './charge/gun_L1-L6_YAG7_FWHM1pt5_M185_R-_GPhase-20_slit_28400_09-22-2017_LC584AL.csv'
 
-#volts_array, cal = sdd_to_volts_array(ict_file)
-#scaled_volts, charge_array = ict_charge(volts_array, cal)
-#plot_ict_curves(scaled_volts, cal)
-
-#desired_charge = 40
-#loc = np.where(charge_array[0,:] < -38.0)
-#print len(loc[0]) 
-
-
-
-
-
-
-
-
+#CSV
+#volts_array, time_array = csv_to_volts_array(ict_file_csv)
+#charge_array, volts_scaled = ict_charge(volts_array, time_array=time_array, data_type='csv')
+#plot_ict_curves(volts_scaled, time_array=time_array)
 
 
 
