@@ -44,6 +44,7 @@ for f in fiducial_files:
 """
 #The following code  is used to do charge cut off
 # and analyize images
+'''
 ict_file_sdds  = glob('./charge/gun_L1-L6_YAG*.sdds')
 yag_backgrounds = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_*background*.dat')
 yags = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_09-2*-2017*.dat')
@@ -53,6 +54,7 @@ yags = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_09-2*-2017*.dat'
 #print len(yag)
 
 for ict_file in ict_file_sdds: 
+   #https://stackoverflow.com/questions/4843158/check-if-a-python-list-item-contains-a-string-inside-another-string
    if 'YAG1' in ict_file:
        key  = 'yag1'
        find = 'YAG1'
@@ -132,7 +134,6 @@ for ict_file in ict_file_sdds:
 
 #------------------------
 #Calc charge 
-#ict_file_sdds = './charge/gun_L1-L6_YAG6_FWHM1pt5_M250_R8pt5_GPhase-20_09-20-2017LC584AL.sdds'
 #ict_file_csv = './charge/gun_L1-L6_YAG7_FWHM1pt5_M185_R-_GPhase-20_slit_28400_09-22-2017_LC584AL.csv'
 
 #CSV
