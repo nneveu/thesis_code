@@ -120,8 +120,8 @@ for ict_file in ict_file_sdds:
    fiducials = np.load('psi_fiducials.npy').flatten()
    #This gives x and y beam sizes 
    beamsizes = fit_data(no_background_images, fiducials, key)
-
 '''
+
 #plt.figure(100)
 #plt.plot(x_axis, raw_x)
 #plt.show()

@@ -10,8 +10,8 @@ import myplots as mplt
 matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('ytick', labelsize=18) 
 
-opal1 = mplt.load('optLinac_M185_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0.stat')
-opal2 = mplt.load('optLinac_M250_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0.stat') 
+opal1 = mplt.load('optLinac_M185_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat')
+opal2 = mplt.load('optLinac_M250_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat') 
 
 beamfiles = glob('beamsizes*.npy')
 n_points  = len(beamfiles)
@@ -53,18 +53,17 @@ for n, bfile in enumerate(beamfiles, 0):
     #print ave_sigx[key]
     #print ave_sigx[key]-std_sigx[key]
 
-    #error_barsx[key] = [ave_sigx[key]-std_sigx[key], ave_sigx[key]+std_sigx[key]]
-    #error_barsy[key] = [ave_sigy[key]-std_sigy[key], ave_sigy[key]+std_sigy[key]]
-    error_barsx[key] = [ave_sigx[key] -np.min(sigmax), np.max(sigmax)-ave_sigx[key] ] 
-    error_barsy[key] = [ave_sigy[key] -np.min(sigmay), np.max(sigmay)-ave_sigy[key] ] 
-    #print error_barsx[key]
+    error_barsx[key] = [3*std_sigx[key], 3*std_sigx[key]]
+    error_barsy[key] = [3*std_sigy[key], 3*std_sigy[key]]
+    #error_barsx[key] = [ave_sigx[key] -np.min(sigmax), np.max(sigmax)-ave_sigx[key] ] 
+    #error_barsy[key] = [ave_sigy[key] -np.min(sigmay), np.max(sigmay)-ave_sigy[key] ] 
+    print error_barsx[key]
 
 sigmax = np.array([ave_sigx['yag1'], ave_sigx['yag2'], ave_sigx['yag3'], ave_sigx['yag6'], ave_sigx['yagCTR']])
 sigmay = np.array([ave_sigy['yag1'], ave_sigy['yag2'], ave_sigy['yag3'], ave_sigy['yag6'], ave_sigy['yagCTR']])
 
 
 errorx = np.append([error_barsx['yag1'], error_barsx['yag2']], [error_barsx['yag3'], error_barsx['yag6'], error_barsx['yagCTR']], axis=0) 
-
 errory = np.append([error_barsy['yag1'], error_barsy['yag2']], [error_barsy['yag3'], error_barsy['yag6'], error_barsy['yagCTR']], axis=0)
 #print error_barsx
 
@@ -81,24 +80,25 @@ plt.figure(1)
 plt.title('Beam Size: $\sigma_x$', size=20)
 plt.xlabel('Z Location [m]', size=20)
 plt.ylabel('$\sigma_x$ [mm]', size=20)
-plt.plot(opal1['z'], opal1['xrms'], 'g-', label = 'OPAL M=185')
-plt.plot(opal2['z'], opal2['xrms'], 'b-', label = 'OPAL M=250') 
-plt.errorbar(x_axis, sigmax, yerr=[lowerx, upperx], )
+plt.plot(opal1['z'], opal1['xrms'], 'g-', label = 'OPAL Weak Solenoid')
+plt.plot(opal2['z'], opal2['xrms'], 'b-', label = 'OPAL Strong Solenoid') 
+plt.errorbar(x_axis, sigmax, yerr=[lowerx, upperx], fmt='ko-', markersize=5, label='Data Weak Solenoid')
 plt.legend(loc='best', prop={'size': 16})
 plt.axis([0,20, 0, 20])
 plt.grid()
-plt.show()
+#plt.show()
+plt.savefig('beamsizes_x.pdf', dpi=1000, bbox_inches='tight')
 
 plt.figure(2)
 plt.title('Beam Size: $\sigma_y$', size=20)
 plt.xlabel('Z Location [m]', size=20)
 plt.ylabel('$\sigma_y$ [mm]', size=20)
-plt.plot(opal1['z'], opal1['yrms'], 'g-', label = 'OPAL M=185')
-plt.plot(opal2['z'], opal2['yrms'], 'b-', label = 'OPAL M=250')
-plt.errorbar(x_axis, sigmay, yerr=[lowery, uppery], )
+plt.plot(opal1['z'], opal1['yrms'], 'g-', label = 'OPAL Weak Solenoid')
+plt.plot(opal2['z'], opal2['yrms'], 'b-', label = 'OPAL Strong Solenoid')
+plt.errorbar(x_axis, sigmay, yerr=[lowery, uppery],fmt='ko-', markersize=5, label='Data Weak Solenoid' )
 plt.legend(loc='best', prop={'size': 16})
 plt.axis([0,20, 0, 20])
 plt.grid()
-plt.show()
-
+#plt.show()
+plt.savefig('beamsizes_y.pdf', dpi=1000, bbox_inches='tight')
 
