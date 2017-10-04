@@ -44,7 +44,7 @@ for f in fiducial_files:
 """
 #The following code  is used to do charge cut off
 # and analyize images
-'''
+
 ict_file_sdds  = glob('./charge/gun_L1-L6_YAG*.sdds')
 yag_backgrounds = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_*background*.dat')
 yags = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_09-2*-2017*.dat')
@@ -52,27 +52,34 @@ yags = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_09-2*-2017*.dat'
 #print len(ict_file_sdds)#, ict_file_sdds
 #print len(yag_background)#, yag_background
 #print len(yag)
-
-for ict_file in ict_file_sdds: 
+count = 0
+ict_file = ict_file_sdds[2]
+while count == 0:
+#for ict_file in ict_file_sdds: 
    #https://stackoverflow.com/questions/4843158/check-if-a-python-list-item-contains-a-string-inside-another-string
    if 'YAG1' in ict_file:
        key  = 'yag1'
        find = 'YAG1'
+       basename = 'YAG 1: z = 3.1 [m]'
        yag_back =  [s for s in yag_backgrounds if find in s]
        yag      =  [s for s in yags if find in s] 
+   
    elif 'YAG2' in ict_file:
        key  = 'yag2'
        find = 'YAG2'
+       basename = 'YAG 2: z = 6.4 [m]'
        yag_back =  [s for s in yag_backgrounds if find in s] 
        yag      =  [s for s in yags if find in s] 
    elif 'YAG3' in ict_file:
        key = 'yag3'
        find = 'YAG3'
+       basename = 'YAG 3: z = 8.8 [m]'
        yag_back =  [s for s in yag_backgrounds if find in s] 
        yag      =  [s for s in yags if find in s] 
    elif 'YAG6' in ict_file:
        key = 'yag6'
        find = 'YAG6'
+       basename = 'YAG 6: z = 15.8 [m]'
        yag_back =  [s for s in yag_backgrounds if find in s] 
        yag      =  [s for s in yags if find in s] 
    elif 'YAG7' in ict_file:
@@ -80,20 +87,25 @@ for ict_file in ict_file_sdds:
        find = 'YAG7'
        yag_back =  [s for s in yag_backgrounds if find in s]
        yag      =  [s for s in yags if find in s]  
+
    elif 'CTR' in ict_file:
        key = 'yagCTR'
        find = 'CTR'
+       basename = 'CTR YAG: z = 16.8 [m]'
        yag_back =  [s for s in yag_backgrounds if find in s] 
        yag      =  [s for s in yags if find in s]  
+      
    else: 
-       print 'bad key'
-
+      print 'bad key'
+   
    print yag_back, yag
-
+   
    #SDDS
    volts_array, cal = sdds_to_volts_array(ict_file)
    charge_array, scaled_volts = ict_charge(volts_array, data_type='sdds',cal_array=cal)
    #plot_ict_curves(scaled_volts, cal)
+   count = 1
+
 
    #Load background images
    (bx, by,b_Nframes, background_array) = readimage(yag_back[0])
@@ -102,7 +114,7 @@ for ict_file in ict_file_sdds:
    di_background  = difilter(background_array)
    #Average background into one image 
    ave_background = average_images(di_background)
-
+   
    #Load images
    (dx, dy, Nframes, image_array) = readimage(yag[0])
    #print "Dx,Dy,NFrames= ",dx,dy,Nframes
@@ -113,14 +125,34 @@ for ict_file in ict_file_sdds:
    di_images = difilter(charge_images)
    #Subtract background
    no_background_images = background_subtraction(di_images, ave_background)
+   z = len(no_background_images[0,0,:])
+   for i in range(0,z):
+      if key=='yag2':
+          crop_array = np.zeros((300,300,z))
+          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=200, x_max=500, y_min=50, y_max=350)
+      elif key=='yag1':
+          crop_array = np.zeros((420,420,z))
+          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=80, x_max=500, y_min=0, y_max=420)
+      elif key=='yag3':
+          crop_array = np.zeros((300,300,z))
+          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=175, x_max=475, y_min=100, y_max=400)
+
    #view_each_frame(no_background_images)
-   #ave_no_back = average_images(no_background_images)
+   ave_crop = average_images(crop_array)
+   #rivers = np.empty_like(ave_crop)
+   #rivers = np.ma.masked_where(ave_crop < 100, rivers)
+   #crop = crop_image(ave_no_back, x_min=50,x_max=500, y_min=0, y_max=450)
 
    #Starting to find fits
    fiducials = np.load('psi_fiducials.npy').flatten()
+   fid = fiducials[0][key]
+   #basename = 'plot_hist_'+key
+   add_dist_to_image(ave_crop, fid,basename )
+   #x_axis   = (np.arange(0,dx) - dx/2)*fiducials[0][key]
+   #y_axis   = (np.arange(0,dy) - dx/2)*fiducials[0][key]
+
    #This gives x and y beam sizes 
-   beamsizes = fit_data(no_background_images, fiducials, key)
-'''
+   beamsizes = fit_data(crop_array, fiducials, key)
 
 #plt.figure(100)
 #plt.plot(x_axis, raw_x)
