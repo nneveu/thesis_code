@@ -10,8 +10,8 @@ import myplots as mplt
 matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('ytick', labelsize=18) 
 
-opal1 = mplt.load('optLinac_M185_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat')
-opal2 = mplt.load('optLinac_M250_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat') 
+opal1 = mplt.load('optLinac_M185_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0.stat') #_3D.stat')
+opal2 = mplt.load('optLinac_M250_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0.stat') #_3D.stat') 
 
 beamfiles = glob('beamsizes*.npy')
 n_points  = len(beamfiles)
@@ -67,6 +67,9 @@ errorx = np.append([error_barsx['yag1'], error_barsx['yag2']], [error_barsx['yag
 errory = np.append([error_barsy['yag1'], error_barsy['yag2']], [error_barsy['yag3'], error_barsy['yag6'], error_barsy['yagCTR']], axis=0)
 #print error_barsx
 
+print sigmax
+print sigmay
+
 lowerx = errorx[:,0]
 upperx = errorx[:,1]
 
@@ -76,6 +79,9 @@ uppery = errory[:,1]
 #print lower_bound
 #print upper_bound
 
+major_ticks = np.arange(0, 20, 5)                                              
+#minor_ticks = np.arange(0, 101, 5)  
+
 plt.figure(1)
 plt.title('Beam Size: $\sigma_x$', size=20)
 plt.xlabel('Z Location [m]', size=20)
@@ -84,9 +90,9 @@ plt.plot(opal1['z'], opal1['xrms'], 'g-', label = 'OPAL Weak Solenoid')
 plt.plot(opal2['z'], opal2['xrms'], 'b-', label = 'OPAL Strong Solenoid') 
 plt.errorbar(x_axis, sigmax, yerr=[lowerx, upperx], fmt='ko-', markersize=5, label='Data Weak Solenoid')
 plt.legend(loc='best', prop={'size': 16})
-plt.axis([0,20, 0, 20])
-plt.grid()
-#plt.show()
+plt.axis([0,20, 0, 17])
+plt.minorticks_on()
+plt.grid(True)#, which='both', color = '0.75', linestyle='--')
 plt.savefig('beamsizes_x.pdf', dpi=1000, bbox_inches='tight')
 
 plt.figure(2)
@@ -97,8 +103,8 @@ plt.plot(opal1['z'], opal1['yrms'], 'g-', label = 'OPAL Weak Solenoid')
 plt.plot(opal2['z'], opal2['yrms'], 'b-', label = 'OPAL Strong Solenoid')
 plt.errorbar(x_axis, sigmay, yerr=[lowery, uppery],fmt='ko-', markersize=5, label='Data Weak Solenoid' )
 plt.legend(loc='best', prop={'size': 16})
-plt.axis([0,20, 0, 20])
-plt.grid()
-#plt.show()
+plt.axis([0,20, 0, 17])
+plt.minorticks_on()
+plt.grid(True)#, which='both', color='0.75', linestyle='--')
 plt.savefig('beamsizes_y.pdf', dpi=1000, bbox_inches='tight')
 

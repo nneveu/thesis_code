@@ -53,7 +53,7 @@ yags = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_09-2*-2017*.dat'
 #print len(yag_background)#, yag_background
 #print len(yag)
 count = 0
-ict_file = ict_file_sdds[2]
+ict_file = ict_file_sdds[4]
 while count == 0:
 #for ict_file in ict_file_sdds: 
    #https://stackoverflow.com/questions/4843158/check-if-a-python-list-item-contains-a-string-inside-another-string
@@ -136,6 +136,13 @@ while count == 0:
       elif key=='yag3':
           crop_array = np.zeros((300,300,z))
           crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=175, x_max=475, y_min=100, y_max=400)
+      elif key=='yag6':
+          crop_array = np.zeros((225,225,z))
+          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=175, x_max=400, y_min=125, y_max=350)
+      elif key=='yagCTR':
+          crop_array = np.zeros((250,250,z))
+          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=135, x_max=385, y_min=65, y_max=315)
+
 
    #view_each_frame(no_background_images)
    ave_crop = average_images(crop_array)
