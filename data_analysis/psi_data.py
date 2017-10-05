@@ -53,7 +53,7 @@ yags = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_09-2*-2017*.dat'
 #print len(yag_background)#, yag_background
 #print len(yag)
 count = 0
-ict_file = ict_file_sdds[4]
+ict_file = ict_file_sdds[3]
 while count == 0:
 #for ict_file in ict_file_sdds: 
    #https://stackoverflow.com/questions/4843158/check-if-a-python-list-item-contains-a-string-inside-another-string
@@ -131,14 +131,14 @@ while count == 0:
           crop_array = np.zeros((300,300,z))
           crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=200, x_max=500, y_min=50, y_max=350)
       elif key=='yag1':
-          crop_array = np.zeros((420,420,z))
-          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=80, x_max=500, y_min=0, y_max=420)
+          crop_array = np.zeros((380,380,z))
+          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=70, x_max=450, y_min=20, y_max=400)
       elif key=='yag3':
           crop_array = np.zeros((300,300,z))
           crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=175, x_max=475, y_min=100, y_max=400)
       elif key=='yag6':
-          crop_array = np.zeros((225,225,z))
-          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=175, x_max=400, y_min=125, y_max=350)
+          crop_array = np.zeros((300,300,z))
+          crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=125, x_max=425, y_min=75, y_max=375)
       elif key=='yagCTR':
           crop_array = np.zeros((250,250,z))
           crop_array[:,:,i] = crop_image(no_background_images[:,:,0], x_min=135, x_max=385, y_min=65, y_max=315)
@@ -159,7 +159,7 @@ while count == 0:
    #y_axis   = (np.arange(0,dy) - dx/2)*fiducials[0][key]
 
    #This gives x and y beam sizes 
-   beamsizes = fit_data(crop_array, fiducials, key)
+   #beamsizes = fit_data(crop_array, fiducials, key)
 
 #plt.figure(100)
 #plt.plot(x_axis, raw_x)
