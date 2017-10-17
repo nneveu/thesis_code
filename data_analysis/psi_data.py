@@ -53,9 +53,9 @@ yags = glob('./images/gun_L1-L6_YAG*_FWHM1pt5_M185_R-_GPhase-20_09-2*-2017*.dat'
 #print len(yag_background)#, yag_background
 #print len(yag)
 count = 0
-ict_file = ict_file_sdds[3]
-while count == 0:
-#for ict_file in ict_file_sdds: 
+#ict_file = ict_file_sdds[3]
+#while count == 0:
+for ict_file in ict_file_sdds: 
    #https://stackoverflow.com/questions/4843158/check-if-a-python-list-item-contains-a-string-inside-another-string
    if 'YAG1' in ict_file:
        key  = 'yag1'
@@ -159,7 +159,7 @@ while count == 0:
    #y_axis   = (np.arange(0,dy) - dx/2)*fiducials[0][key]
 
    #This gives x and y beam sizes 
-   #beamsizes = fit_data(crop_array, fiducials, key)
+   beamsizes = fit_data(crop_array, fiducials, key)
 
 #plt.figure(100)
 #plt.plot(x_axis, raw_x)

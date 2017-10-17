@@ -10,8 +10,8 @@ import myplots as mplt
 matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('ytick', labelsize=18) 
 
-opal1 = mplt.load('optLinac_M185_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0.stat') #_3D.stat')
-opal2 = mplt.load('optLinac_M250_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0.stat') #_3D.stat') 
+opal1 = mplt.load('optLinac_M185_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat') #_3D.stat')
+opal2 = mplt.load('optLinac_M250_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat') #_3D.stat') 
 
 beamfiles = glob('beamsizes*.npy')
 n_points  = len(beamfiles)
