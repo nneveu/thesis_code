@@ -115,7 +115,7 @@ axarr[1, 1].set_xticks(np.arange(0.0, 5.0, 1.0) )
 axarr[1, 1].axis([0.0,4.0,0,8.0])
 #axarr[1, 1].legend(loc='lower right')
 
-markers = ['g-', 'b--', 'c-', 'r--']
+markers = ['g-', 'b--', 'c-', 'r-']
 for i in range(0,len(v)):
     data_n = data[i]
     axarr[0, 0].plot(data_n['z'], data_n['xrms'], markers[i], label = 'OPAL V'+v[i])
@@ -135,16 +135,16 @@ plt.savefig('./regtest.pdf', format='pdf', dpi=1000, bbox_inches='tight')
 #plt.setp([a.get_xticklabels() for a in axarr[0, :]], visible=False)
 #plt.setp([a.get_yticklabels() for a in axarr[:, 1]], visible=False)
 
-'''
-plt.figure()
-plt.plot(dataopal1['z'], dataopal1['Bz'], label='OPAL V'+v1)
-plt.plot(dataopal2['z'], dataopal2['Bz'], '*', markevery=200, label='OPAL V'+v2)
+
+plt.figure(100)
+for i in range(0,len(v)):
+    plt.plot(dataopal1['z'], dataopal1['Bz'], markers[i], label='OPAL V'+v[i])
 plt.legend()
 
-plt.figure()
-plt.plot(dataopal1['z'], dataopal1['Ez'], label='OPAL V'+v1)
-plt.plot(dataopal2['z'], dataopal2['Ez'], '*', markevery=200, label='OPAL V'+v2)
+plt.figure(200)
+for i in range(0,len(v)):
+    plt.plot(dataopal1['z'], dataopal1['Ez'], markers[i], label='OPAL V'+v[i])
 plt.legend()
-'''
+
 
 plt.show()
