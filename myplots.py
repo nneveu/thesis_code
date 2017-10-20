@@ -5,7 +5,7 @@ Created on Wed Jun 01 12:10:00 2016
 @author: nneveu
 """
 #Importing modules ~~~~~~~~~~~~~~~~~~
-import scipy.io as spio
+#import scipy.io as spio
 import numpy as np
 #import matplotlib
 import matplotlib.pyplot as plt
@@ -98,7 +98,7 @@ def load(myfile):
     with open(myfile, "r") as parsefile:
         for num, line in enumerate(parsefile, 1):
             if lookfor in line:
-                if line.split('.')[1] > 6: 
+                if int(line.split('.')[1]) > 6: 
                     skip = num+1
                 else:
                     skip = num
@@ -322,113 +322,113 @@ def plotting(data, ptype='energy', legendloc='best', sigma=3, mylabel='none'):
 #~~~~~~~~~~~~OLD PLOTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   
 def emit3in1(xemit, yemit, zemit, z, filename):
 
-	with PdfPages('EmittancePlots.pdf') as pdf:
+    with PdfPages('EmittancePlots.pdf') as pdf:
 
-		plt.plot(z,xemit, 'b-', label='x emittance')
-		plt.plot(z,yemit, 'r-', label='y emittance')
-		plt.plot(z,zemit, 'k-', label='z emittance')
-
-		plt.legend(loc='best')
-		plt.xlabel(r'Z [m]')
-		plt.ylabel(r'Emittance [mm-mrad]')
-		plt.title(r'Emittance Values Vs. Z')
-		pdf.savefig()
-		plt.close()
+        plt.plot(z,xemit, 'b-', label='x emittance')
+        plt.plot(z,yemit, 'r-', label='y emittance')
+        plt.plot(z,zemit, 'k-', label='z emittance')
+        plt.legend(loc='best')
+        plt.xlabel(r'Z [m]')
+        plt.ylabel(r'Emittance [mm-mrad]')
+        plt.title(r'Emittance Values Vs. Z')
+        pdf.savefig()
+        plt.close()
 
 def emitxyandz(xemit, yemit, zemit, z, filename):
 	
-	with PdfPages(filename+'.pdf') as pdf:
+    with PdfPages(filename+'.pdf') as pdf:
 		
-		plt.plot(z,xemit, 'b-', label = r'\epsilon_{nx}')
-		plt.plot(z,yemit, 'r-', label = r'\epsilon_{ny}')
+        plt.plot(z,xemit, 'b-', label = r'\epsilon_{nx}')
+        plt.plot(z,yemit, 'r-', label = r'\epsilon_{ny}')
 		
-		plt.legend(loc='best')
-                plt.xlabel(r'Z [m]')
-                plt.ylabel(r'Emittance [mm-mrad]')
-                plt.title(r'X and Y Emittance Vs. Z')
-                pdf.savefig()
-                plt.close()
+        plt.legend(loc='best')
+        plt.xlabel(r'Z [m]')
+        plt.ylabel(r'Emittance [mm-mrad]')
+        plt.title(r'X and Y Emittance Vs. Z')
+        pdf.savefig()
+        plt.close()
 
-		plt.plot(z,zemit, 'r-', label = r'\epsilon_{ny}')
+        plt.plot(z,zemit, 'r-', label = r'\epsilon_{ny}')
 
-                plt.legend(loc='best')
-                plt.xlabel(r'Z [m]')
-                plt.ylabel(r'Emittance [mm-mrad]')
-                plt.title(r' Z Emittance Vs. Z')
-                pdf.savefig()
-                plt.close()
+        plt.legend(loc='best')
+        plt.xlabel(r'Z [m]')
+        plt.ylabel(r'Emittance [mm-mrad]')
+        plt.title(r' Z Emittance Vs. Z')
+        pdf.savefig()
+        plt.close()
 
 
 def beplots(Bx, By, Bz, Ex, Ey, Ez, z, filename):
+ 
+    with PdfPages('BandEplots.pdf') as pdf:
 
-	with PdfPages('BandEplots.pdf') as pdf:
-
-		#Plotting Magnetic fields
-		plt.plot(z, Bx,'r-', label = 'Bx')
-		plt.plot(z, By,'k-', label = 'By')
-		plt.plot(z, Bz,'b-', label = 'Bx')
+	#Plotting Magnetic fields
+        plt.plot(z, Bx,'r-', label = 'Bx')
+        plt.plot(z, By,'k-', label = 'By')
+        plt.plot(z, Bz,'b-', label = 'Bx')
 	
-        	plt.legend(loc='best')
-        	plt.xlabel(r'Z [m]', size=20)
-                plt.ylabel(r'Magnetic Fields [T]', size=20)
-		plt.title(r'Magnetic Fields vs. Z', size=24)
-        	pdf.savefig()
-        	plt.close()
+      
+        plt.legend(loc='best')
+        plt.xlabel(r'Z [m]', size=20)
+        plt.ylabel(r'Magnetic Fields [T]', size=20)
+        plt.title(r'Magnetic Fields vs. Z', size=24)
+        pdf.savefig()
+        plt.close()
 
-		#Plotting Electric Fields
-		plt.plot(z, Ex,'r-', label = 'Ex')
-		plt.plot(z, Ey,'k-', label = 'Ey')
-		plt.plot(z, Ez,'b-', label = 'Ez')
+	#Plotting Electric Fields
+        plt.plot(z, Ex,'r-', label = 'Ex')
+        plt.plot(z, Ey,'k-', label = 'Ey')
+        plt.plot(z, Ez,'b-', label = 'Ez')
 	
-		plt.legend(loc='best')
-		plt.xlabel(r'Z [m]', size=20)
-		plt.ylabel(r'Electric Fields [Mv/m]', size=20)
-		plt.title(r'Electric Fields vs. Z', size=24)
-		pdf.savefig()
-		plt.close()
+        plt.legend(loc='best')
+        plt.xlabel(r'Z [m]', size=20)
+        plt.ylabel(r'Electric Fields [Mv/m]', size=20)
+        plt.title(r'Electric Fields vs. Z', size=24)
+        pdf.savefig()
+        plt.close()
 
 
 
 def edeplots(E, dE, z, filename):
 	
-	with PdfPages(filename) as pdf:
-		spread = dE/E
+    with PdfPages(filename) as pdf:
+        spread = dE/E
 
-		fig, ax1=plt.subplots()
-	
-		ax1.plot(z, E, 'b-', label='Energy')
+        fig, ax1=plt.subplots()
 
-		ax2 = ax1.twinx()	
-		ax2.plot(z, spread, 'r-', label='dE')
-	
-		ln1, lab1 = ax1.get_legend_handles_labels()
-		ln2, lab2 = ax2.get_legend_handles_labels()
-		ax2.legend(ln1+ln2, lab1+lab2, loc='upper left')
+        ax1.plot(z, E, 'b-', label='Energy')
 
-		plt.title(r'Energy and Energy Spread Vs. Z')
-		ax1.set_xlabel(r'Z [m]')
-		ax1.set_ylabel(r'Energy [MeV]')
-		ax2.set_ylabel(r'dE/E')
+        ax2 = ax1.twinx()	
+        ax2.plot(z, spread, 'r-', label='dE')
 
-		for t1 in ax1.get_yticklabels():
-			t1.set_color('b')
-		for t1 in ax2.get_yticklabels():
- 			t1.set_color('r')
+        ln1, lab1 = ax1.get_legend_handles_labels()
+        ln2, lab2 = ax2.get_legend_handles_labels()
+        ax2.legend(ln1+ln2, lab1+lab2, loc='upper left')
 
-		pdf.savefig()
-		plt.close()
+        plt.title(r'Energy and Energy Spread Vs. Z')
+        ax1.set_xlabel(r'Z [m]')
+        ax1.set_ylabel(r'Energy [MeV]')
+        ax2.set_ylabel(r'dE/E')
+
+        for t1 in ax1.get_yticklabels():
+            t1.set_color('b')
+        for t1 in ax2.get_yticklabels():
+            t1.set_color('r')
+
+        pdf.savefig()
+        plt.close()
 
 def rmsplots(xrms, yrms, zrms, z, filename):
 
    with PdfPages('RMSplots.pdf') as pdf:
-	plt.plot(z,xrms, 'bo', label='xrms')
-	plt.plot(z,yrms, 'r-', label='yrms')
-	plt.plot(z,zrms, 'k-', label='zrms')
+        plt.plot(z,xrms, 'bo', label='xrms')
+        plt.plot(z,yrms, 'r-', label='yrms')
+        plt.plot(z,zrms, 'k-', label='zrms')
 
-	plt.legend(loc='best')
-	plt.xlabel(r'Z [m]', size = 20)
-	plt.ylabel(r'RMS Values [mm]', size = 20)
-	plt.title(r'RMS Values Vs. Z')
-	pdf.savefig()
-	plt.close()
+        plt.legend(loc='best')
+        plt.xlabel(r'Z [m]', size = 20)
+        plt.ylabel(r'RMS Values [mm]', size = 20)
+        plt.title(r'RMS Values Vs. Z')
+        pdf.savefig()
+        plt.close()
 
