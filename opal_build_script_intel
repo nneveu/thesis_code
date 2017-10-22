@@ -1,0 +1,114 @@
+#!/bin/bash
+
+
+#BASHRC should have all modules needed
+module purge
+
+#module load intel-parallel-studio/cluster.2017.4-wyg4gfu
+module load intel
+module load intel-mpi #/2017.3-dfphq6k
+module load cmake #/3.8.1-orygmpj
+module load gmp   #/6.1.2-jg3ofko
+module load mpfr  #/3.1.5-kdka53b
+module load mpc   #/1.0.3-vz2d2ni
+module load hdf5  #/1.10.1-vzncl5h 
+module load gsl   #/2.4 
+#module load boost #/1.63.0-m64qkx4 #/1.63.0-yyrgc3r
+module load intel-mkl
+module load szip
+
+# Point to icc and icpc
+I_MPI_CC=icc;I_MPI_CXX=icpc;I_MPI_F90=ifort;I_MPI_F77=ifort
+export I_MPI_CC I_MPI_CXX I_MPI_F90 I_MPI_F77
+
+echo $I_MPI_CXX
+#CC=icc;CXX=icpc;F90=ifort;F77=ifort
+#export CC CXX F90 F77
+
+CC=mpiicc;CXX=mpiicpc;F90=ifort;F77=ifort
+export CC CXX F90 F77
+
+#export CFLAGS=icc
+#export CXXFLAGS=icpc
+#export FCFLAGS=ifort
+
+#The following directory doesnt have c++ intel lib
+#MPI_LIBRARY=/home/software/spack-0.10.1/opt/spack/linux-centos7-x86_64/intel-17.0.4/intel-mpi-2017.3-dfphq6kavje2olnichisvjjndtridrok/compilers_and_libraries_2017.4.196/linux/mpi/intel64/lib
+#export MPI_CXX_COMPILER=/home/software/spack-0.10.1/opt/spack/linux-centos7-x86_64/intel-17.0.4/intel-mpi-2017.3-dfphq6kavje2olnichisvjjndtridrok/compilers_and_libraries_2017.4.196/linux/mpi/intel64/bin/mpiicpc
+
+#echo $MPI_CXX_COMPILER
+#echo $MPI_LIBRARY 
+
+#DOWNLOADS_DIR="${HOME}/Downloads"
+#PREFIX="${HOME}/software"
+#SRC_DIR="${HOME}/src"
+#export PATH="${PREFIX}/bin:${PATH}"
+export PATH="/blues/gpfs/home/neveu/git/H5hut-2.0.0rc3/build:${PATH}"
+
+export H5HUT_HOME=$HOME/git/H5hut-2.0.0rc3/build_intel
+export H5HUT_PREFIX=$H5HUT_HOME
+export H5HUT_DIR=$H5HUT_HOME
+export H5HUT_INCLUDE_DIR=$H5HUT_HOME/include
+export H5HUT_LIBRARY_DIR=$H5HUT_HOME/lib
+
+export BOOST_HOME=$HOME/git/boost_1_62_0/build/
+export BOOST_DIR=$BOOST_HOME
+export BOOST_PREFIX=$BOOST_HOME
+export BOOST_INCLUDE_DIR=$BOOST_HOME/include
+export BOOST_LIBRARY_DIR=$BOOST_HOME/lib
+export BOOST_ROOT=/home/neveu/git/boost_1_62_0/
+echo $BOOST_ROOT
+echo $BOOST_DIR
+
+#echo $SRC_DIR
+
+#export LIBRARY_PATH="/blues/gpfs/home/software/spack-0.10.1/opt/spack/linux-centos7-x86_64/intel-17.0.4/intel-mkl-2017.3.196-jyjmyutcol3veyt4bazftyqkxxzmfd7o/pkg/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin:${PREFIX}/lib:${PREFIX}/lib64:${LIBRARY_PATH}"
+#export LD_LIBRARY_PATH="/blues/gpfs/home/software/spack-0.10.1/opt/spack/linux-centos7-x86_64/intel-17.0.4/intel-mkl-2017.3.196-jyjmyutcol3veyt4bazftyqkxxzmfd7o/pkg/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin:${PREFIX}/lib:${PREFIX}/lib64:${LD_LIBRARY_PATH}"
+#export C_INCLUDE_PATH="${PREFIX}/include"
+#export CPLUS_INCLUDE_PATH="${PREFIX}/include"
+#export BOOST_ROOT=/home/neveu/software
+
+#NJOBS=4
+
+#mkdir -p "${PREFIX}"
+#mkdir -p "${DOWNLOADS_DIR}"
+#mkdir -p "${SRC_DIR}"
+
+# Configure OPAL
+#mkdir -p "${SRC_DIR}/OPAL/src/build_vanilla" && cd "$_"
+#########################################################
+#ABOVE NEEDED FOR ALL BUILDS
+########################################################
+
+#TYPE: For regular build
+#To make regular build (one type bdw)
+#cmake --prefix="${PREFIX}"  ..
+
+#TYPE:To make fat build with mkl:
+#export GSL_INCLUDE_DIR=/home/neveu/software/include
+#export GSL_LIBRARY=/home/neveu/software/lib
+#export GSL_LIBRARY_CBLAS=/blues/gpfs/home/software/spack-0.10.1/opt/spack/linux-centos7-x86_64/intel-17.0.4/intel-mkl-2017.3.196-jyjmyutcol3veyt4bazftyqkxxzmfd7o/pkg/compilers_and_libraries_2017.4.196/linux/mkl/lib/intel64_lin/libmkl_intel_lp64.a
+
+#echo $GSL_LIBRARY_CBLAS
+
+#Latest cmake call:
+#cmake -LA -DGSL_LIBRARY_CBLAS="${GSL_LIBRARY_CBLAS}" -DCMAKE_INSTALL_PREFIX=/home/neveu/software -DCMAKE_CXX_FLAGS="-lsz -mkl -axMIC-AVX512,CORE-AVX2" ..
+#cmake -DCMAKE_INSTALL_PREFIX=/home/neveu/software -DCMAKE_CXX_FLAGS="-lsz" ..
+#make -j 4
+
+#Other possible options?
+#-no-gcc-include-dir
+#-mkl[=<arg>]
+
+#make 
+
+#Edited link.txt file with following:
+#vi src/CMakeFiles/opal.dir/link.txt
+#%s/-lmpi_cxx//g
+
+#make 
+#make install
+
+pwd
+
+
