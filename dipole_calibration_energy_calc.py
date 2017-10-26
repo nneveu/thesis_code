@@ -22,13 +22,14 @@ def counts_to_current(counts):
 
 
 def current_to_bfield(current):
+    #from gao's script to pull info from plot
     bfield = (180.9708*current - 7.2053)*10**-4
     return bfield
 
 def counts_to_energy(rho, counts):
     i = counts_to_current(counts)    
     bfield = current_to_bfield(i)
-    energy = ((bfield*rho)/3.3356)*10**3
+    energy = ((bfield*rho)/3.335641)*10**3
     return energy    
 
 def total_energy(momentum):
