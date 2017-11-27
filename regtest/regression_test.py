@@ -4,7 +4,7 @@ Created on Wed Sep 28 17:08:59 2016
 
 @author: nneveu
 """
-import scipy.io as spio
+#import scipy.io as spio
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
@@ -20,13 +20,14 @@ import myplots as mplt
 n = 4
 
 dataopal1 = mplt.load('1nCR0pt75LaserAstraM273.stat')
-dataopal2 = mplt.load('RFphotoinjector_John.stat') #-1.9.stat')
-dataopal3 = mplt.load('RFphotoinjector-1.6_binary.stat')
-dataopal4 = mplt.load('RFphotoinjector-1.9.stat') #-1.9.stat')
+dataopal2 = mplt.load('RFphotoinjector_src_1.6.stat') #-1.9.stat')
+dataopal3 = mplt.load('RFphotoinjector-1.9_bdw.stat')
+dataopal4 = mplt.load('RFphotoinjector-1.9_knl.stat') #-1.9.stat')
 
 data = [dataopal1, dataopal2, dataopal3, dataopal4]
 
-v = [str(1.4), str(1.6), str(1.6) + ' binary', str(1.9)]
+v = [str(1.4), str(1.6), str(1.9)+' bdw', str(1.9) + ' knl']
+markers = ['c*', 'g-', 'b--', 'r*']
 
 # Four axes, returned as a 2-d array
 f, axarr = plt.subplots(2, 2, figsize=(7.5,6))
@@ -115,13 +116,12 @@ axarr[1, 1].set_xticks(np.arange(0.0, 5.0, 1.0) )
 axarr[1, 1].axis([0.0,4.0,0,8.0])
 #axarr[1, 1].legend(loc='lower right')
 
-markers = ['g-', 'b--', 'c-', 'r-']
 for i in range(0,len(v)):
     data_n = data[i]
-    axarr[0, 0].plot(data_n['z'], data_n['xrms'], markers[i], label = 'OPAL V'+v[i])
-    axarr[1, 0].plot(data_n['z'], data_n['zrms'], markers[i], label = 'OPAL V'+v[i])
-    axarr[0, 1].plot(data_n['z'], data_n['xemit'], markers[i], label = 'OPAL V'+v[i])   
-    axarr[1, 1].plot(data_n['z'], data_n['E']+0.511, markers[i], label = 'OPAL V'+v[i]) 
+    axarr[0, 0].plot(data_n['z'], data_n['xrms'], markers[i], label = 'OPAL V'+v[i], markevery=50)
+    axarr[1, 0].plot(data_n['z'], data_n['zrms'], markers[i], label = 'OPAL V'+v[i], markevery=50)
+    axarr[0, 1].plot(data_n['z'], data_n['xemit'], markers[i], label = 'OPAL V'+v[i], markevery=50)   
+    axarr[1, 1].plot(data_n['z'], data_n['E']+0.511, markers[i], label = 'OPAL V'+v[i], markevery=50) 
 
 axarr[0, 0].legend(loc='best')
 axarr[1, 0].legend(loc='best')
@@ -135,16 +135,15 @@ plt.savefig('./regtest.pdf', format='pdf', dpi=1000, bbox_inches='tight')
 #plt.setp([a.get_xticklabels() for a in axarr[0, :]], visible=False)
 #plt.setp([a.get_yticklabels() for a in axarr[:, 1]], visible=False)
 
+#
+#plt.figure(100)
+#for i in range(0,len(v)):
+#    plt.plot(dataopal1['z'], dataopal1['Bz'], markers[i], label='OPAL V'+v[i])
+#plt.legend()
+#
+#plt.figure(200)
+#for i in range(0,len(v)):
+#    plt.plot(dataopal1['z'], dataopal1['Ez'], markers[i], label='OPAL V'+v[i])
+#plt.legend()
+#
 
-plt.figure(100)
-for i in range(0,len(v)):
-    plt.plot(dataopal1['z'], dataopal1['Bz'], markers[i], label='OPAL V'+v[i])
-plt.legend()
-
-plt.figure(200)
-for i in range(0,len(v)):
-    plt.plot(dataopal1['z'], dataopal1['Ez'], markers[i], label='OPAL V'+v[i])
-plt.legend()
-
-
-plt.show()
