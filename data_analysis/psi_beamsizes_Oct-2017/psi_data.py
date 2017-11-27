@@ -96,9 +96,9 @@ for ict_file in ict_file_sdds:
        yag      =  [s for s in yags if find in s]  
       
    else: 
-      print('bad key')
+      print 'bad key'
    
-   print(yag_back, yag)
+   print yag_back, yag
    
    #SDDS
    volts_array, cal = sdds_to_volts_array(ict_file)
@@ -152,6 +152,7 @@ for ict_file in ict_file_sdds:
 
    #Starting to find fits
    fiducials = np.load('psi_fiducials.npy', encoding = 'latin1').flatten()
+   #fiducials = np.load('psi_fiducials.npy').flatten()
    fid = fiducials[0][key]
    #basename = 'plot_hist_'+key
    add_dist_to_image(ave_crop, fid,basename )
@@ -160,6 +161,7 @@ for ict_file in ict_file_sdds:
 
    #This gives x and y beam sizes 
    beamsizes = fit_data(crop_array, fid, key)
+   #beamsizes = fit_data(crop_array, fiducials, key)
 
 #plt.figure(100)
 #plt.plot(x_axis, raw_x)
