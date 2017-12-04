@@ -5,7 +5,7 @@ Created on Wed Jun 01 12:10:00 2016
 @author: nneveu
 """
 #Importing modules ~~~~~~~~~~~~~~~~~~
-#import scipy.io as spio
+import scipy.io as spio
 import numpy as np
 #import matplotlib
 import matplotlib.pyplot as plt
