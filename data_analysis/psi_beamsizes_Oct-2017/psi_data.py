@@ -151,7 +151,8 @@ for ict_file in ict_file_sdds:
    #crop = crop_image(ave_no_back, x_min=50,x_max=500, y_min=0, y_max=450)
 
    #Starting to find fits
-   fiducials = np.load('psi_fiducials.npy').flatten()
+   fiducials = np.load('psi_fiducials.npy', encoding = 'latin1').flatten()
+   #fiducials = np.load('psi_fiducials.npy').flatten()
    fid = fiducials[0][key]
    #basename = 'plot_hist_'+key
    add_dist_to_image(ave_crop, fid,basename )
@@ -159,7 +160,8 @@ for ict_file in ict_file_sdds:
    #y_axis   = (np.arange(0,dy) - dx/2)*fiducials[0][key]
 
    #This gives x and y beam sizes 
-   beamsizes = fit_data(crop_array, fiducials, key)
+   beamsizes = fit_data(crop_array, fid, key)
+   #beamsizes = fit_data(crop_array, fiducials, key)
 
 #plt.figure(100)
 #plt.plot(x_axis, raw_x)
