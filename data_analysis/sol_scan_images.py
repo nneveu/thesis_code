@@ -16,6 +16,7 @@ ict_file_sdds   = glob(data_directory+'/YAG1_M2*.csv')
 yag_backgrounds = glob(data_directory+'/YAG1_M2*background*.dat')
 yags            = glob(data_directory+'/YAG1_M2*2017_img.dat')
 
+mask = np.load('mask_dim.npy', encoding = 'latin1').flatten()[0]
 #print len(ict_file_sdds)#, ict_file_sdds
 #print len(yag_background)#, yag_background
 #print len(yag)
@@ -36,7 +37,7 @@ count = 0
 #   
 #   #print("YAG files:\n",yag,'\n', yag_back, '\n')
 #
-for i in range(200,250,5):
+for i in range(200, 204, 5): #,205): #250,5):
    mval = str(i)
    yag       = glob(data_directory+'/YAG1_M'+mval+'*2017_img.dat')[0]
    yag_back  = glob(data_directory+'/YAG1_M'+mval+'*background*.dat')[0]
@@ -50,15 +51,23 @@ for i in range(200,250,5):
   
    #Load background images
    (bx, by,b_Nframes, background_array) = readimage(yag_back, header_size=3)
+   #Load images
+   (dx, dy, Nframes, image_array) = readimage(yag, header_size=3)
+ 
+
+#   mask = createCircularMask(bx, by, center=[237,297], radius=radius) 
+#   masked_img = background_array[:,:,0]
+#   masked_img[~mask] = 0
+#   view_each_frame(masked_img)
+
+   '''
    #Deinterlace images with median filter
    #Note, doing filter first removes more noise
    #di_background  = difilter(background_array)
    #Average background into one image 
    ave_background = average_images(background_array)
   
-   #Load images
-   (dx, dy, Nframes, image_array) = readimage(yag, header_size=3)
-   #print "Dx,Dy,NFrames= ",dx,dy,Nframeks
+     #print "Dx,Dy,NFrames= ",dx,dy,Nframeks
    #Select only images with certain charge
    charge_images, n_images = select_on_charge(image_array, charge_array, 0.95, 1.05)
    #print np.shape(charge_images)
@@ -80,7 +89,7 @@ for i in range(200,250,5):
    #rivers = np.empty_like(ave_crop)
    #rivers = np.ma.masked_where(ave_crop < 100, rivers)
    #crop = crop_image(ave_no_back, x_min=50,x_max=500, y_min=0, y_max=450)
-   '''
+   
    #Starting to find fits
    fiducials = np.load('sol_nov_fiducial.npy', encoding = 'latin1').flatten()
    fid = fiducials[0][key]
