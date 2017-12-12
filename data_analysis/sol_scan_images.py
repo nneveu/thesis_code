@@ -51,10 +51,15 @@ for i in range(200, 204, 5): #,205): #250,5):
   
    #Load background images
    (bx, by,b_Nframes, background_array) = readimage(yag_back, header_size=3)
-   #Load images
+   #Load images, do a charge cut
    (dx, dy, Nframes, image_array) = readimage(yag, header_size=3)
- 
+   #Select only images with certain charge
+   charge_images = select_on_charge(image_array, charge_array, 0.95, 1.05)
 
+   #Masking everything outside YAG screen
+   im_center = [mask['center_x'], mask['center_y']]
+   mask_background = mask_images(background_array, bx, by, im_center, mask['radius']) 
+   view_each_frame(mask_background)
 #   mask = createCircularMask(bx, by, center=[237,297], radius=radius) 
 #   masked_img = background_array[:,:,0]
 #   masked_img[~mask] = 0
@@ -67,9 +72,7 @@ for i in range(200, 204, 5): #,205): #250,5):
    #Average background into one image 
    ave_background = average_images(background_array)
   
-     #print "Dx,Dy,NFrames= ",dx,dy,Nframeks
-   #Select only images with certain charge
-   charge_images, n_images = select_on_charge(image_array, charge_array, 0.95, 1.05)
+   #print "Dx,Dy,NFrames= ",dx,dy,Nframeks
    #print np.shape(charge_images)
 
    #Apply median filter to all frames
