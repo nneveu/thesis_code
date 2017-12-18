@@ -20,15 +20,12 @@ circle_dim = circle_finder(fid_image, min_r=0.367, max_r=0.38)
 fiducial   = fiducial_calc(circle_dim['radius'])
 print('fiducial:', fiducial)
 
-#Load background images
-yag_back  = glob(data_directory+'/YAG1_M'+'*background*.dat')[0]
-(bx, by,b_Nframes, background_array) = readimage(yag_back, header_size=3)
-masked_background    = mask_images(background_array, circle_dim)
-#Clean up noise with median filter
-di_background  = difilter(masked_background)
-#Average background into one image 
-ave_background = average_images(di_background)
-  
+#Error from fiducial = 0.0005 mm/pixel
+fiducials = np.load('yag1_sol_scan_fiducial_11-02-2017.npy', encoding = 'latin1').flatten()
+old = fiducials[0]['yag1']
+print('old:', old, 'new:', fiducial)
+
+ 
 #while count == 0:
 #for ict_file in ict_file_sdds:
 #   print('\n\nCharge file:\n', ict_file) 
@@ -44,17 +41,18 @@ ave_background = average_images(di_background)
 #   
 #   #print("YAG files:\n",yag,'\n', yag_back, '\n')
 #
-for i in range(200, 210, 5): #,205): #250,5):
+for i in range(200, 205, 5): #,205): #250,5):
    mval = str(i)
    yag       = glob(data_directory+'/YAG1_M'+mval+'*2017_img.dat')[0]
    ict_file  = glob(data_directory+'/YAG1_M'+mval+'*.csv')[0] 
-   
+   yag_back  = glob(data_directory+'/YAG1_M'+mval+'*background*.dat')[0]
+  
    #SDDS
    volts_array, time = csv_to_volts_array(ict_file)
    #volts_array, cal = sdds_to_volts_array(ict_file)
    charge_array, scaled_volts = ict_charge(volts_array, data_type='csv',time_array=time)
    #plot_ict_curves(scaled_volts, time_array=time)
-  
+   
    #Load images, do a charge cut
    (dx, dy, Nframes, image_array) = readimage(yag, header_size=3)
 
@@ -62,10 +60,19 @@ for i in range(200, 210, 5): #,205): #250,5):
    #usage = select_on_charge(images, charge, min_charge, max_charge)
    charge_images = select_on_charge(image_array, charge_array, 0.95, 1.05)
 
+   #Load background images
+   (bx, by,b_Nframes, background_array) = readimage(yag_back, header_size=3)
+
    #Masking everything outside YAG screen
+   masked_background    = mask_images(background_array, circle_dim)
    masked_charge_images = mask_images(charge_images, circle_dim)
    #im_center, mask['radius']) 
    #view_each_frame(mask_cut_images)
+
+   #Clean up noise with median filter
+   di_background  = difilter(masked_background)
+   #Average background into one image 
+   ave_background = average_images(di_background)
   
    #Subtract background
    no_background = background_subtraction(masked_charge_images, ave_background)
@@ -76,24 +83,21 @@ for i in range(200, 210, 5): #,205): #250,5):
 
    #Crop images 
    x, y, z = di_images.shape
-   #z = len(no_background_images[0,0,:])
+   crop_array = np.zeros((400,400,z)) 
    for i in range(0,z):
-      crop_array = np.zeros((480,480,z)) #640 = rows = Y
-      crop_array[:,:,i] = crop_image(di_images[:,:,i], x_min=0, x_max=480, y_min=0, y_max=480)
+      crop_array[:,:,i] = crop_image(di_images[:,:,i], x_min=80, x_max=480, y_min=80, y_max=480)
 
-   #view_each_frame(no_background_images)
+   #view_each_frame(crop_array)
    ave_crop = average_images(crop_array)
-    
-   #Error from fiducial = 0.0005 mm/pixel
-   #fiducials = np.load('yag1_sol_scan_fiducial_11-02-2017.npy', encoding = 'latin1').flatten()
-   #old = fiducials[0]['yag1']
-   #print('old:', old, 'new:', fiducial)
-   
+   #view_each_frame(ave_crop)    
+      
    #Starting to find fits
    key = 'yag1'
-   basename = 'plot_hist_M'+key
-   add_dist_to_image(ave_crop, fiducial, 'M'+mval,title="M="+mval, background=1)
+   #Showing x and y projections on averaged image
+   add_dist_to_image(ave_crop, fiducial, './output/'+key+'_M'+mval,title="M="+mval, background=20)
    
-   #This gives x and y beam sizes 
-   beamsizes = fit_data(crop_array, fiducial, key+'_M'+mval)
+   #This gives array with x and y beam sizes 
+   #Every beam size is recorded, not the average only
+   #The arrays will be the same size as the amount of shots analyzed
+   beamsizes = fit_data(crop_array, fiducial, './output/beamsizes_'+key+'_M'+mval)
    
