@@ -44,7 +44,7 @@ ave_background = average_images(di_background)
 #   
 #   #print("YAG files:\n",yag,'\n', yag_back, '\n')
 #
-for i in range(200, 250, 5): #,205): #250,5):
+for i in range(200, 210, 5): #,205): #250,5):
    mval = str(i)
    yag       = glob(data_directory+'/YAG1_M'+mval+'*2017_img.dat')[0]
    ict_file  = glob(data_directory+'/YAG1_M'+mval+'*.csv')[0] 
@@ -92,7 +92,7 @@ for i in range(200, 250, 5): #,205): #250,5):
    #Starting to find fits
    key = 'yag1'
    basename = 'plot_hist_M'+key
-   add_dist_to_image(ave_crop, fiducial, 'M'+mval,title="M="+mval )
+   add_dist_to_image(ave_crop, fiducial, 'M'+mval,title="M="+mval, background=1)
    
    #This gives x and y beam sizes 
    beamsizes = fit_data(crop_array, fiducial, key+'_M'+mval)
