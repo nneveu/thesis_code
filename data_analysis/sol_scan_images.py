@@ -20,12 +20,17 @@ circle_dim = circle_finder(fid_image, min_r=0.367, max_r=0.38)
 fiducial   = fiducial_calc(circle_dim['radius'])
 print('fiducial:', fiducial)
 
-#Error from fiducial = 0.0005 mm/pixel
-fiducials = np.load('yag1_sol_scan_fiducial_11-02-2017.npy', encoding = 'latin1').flatten()
-old = fiducials[0]['yag1']
-print('old:', old, 'new:', fiducial)
+#Error from choosing diff radius values
+# delta_fiducial ~= 0.0005 mm/pixel, less than 1%
+#fiducials = np.load('yag1_sol_scan_fiducial_11-02-2017.npy', encoding = 'latin1').flatten()
+#old = fiducials[0]['yag1']
+#print('old:', old, 'new:', fiducial)
 
- 
+#Make a smaller radius for mask 
+print('radius before', circle_dim['radius'])
+circle_dim['radius'] = int(circle_dim['radius']*0.8) 
+print('radius after', circle_dim['radius'])
+
 #while count == 0:
 #for ict_file in ict_file_sdds:
 #   print('\n\nCharge file:\n', ict_file) 
@@ -41,7 +46,7 @@ print('old:', old, 'new:', fiducial)
 #   
 #   #print("YAG files:\n",yag,'\n', yag_back, '\n')
 #
-for i in range(200, 205, 5): #,205): #250,5):
+for i in range(205, 210, 5): #,205): #250,5):
    mval = str(i)
    yag       = glob(data_directory+'/YAG1_M'+mval+'*2017_img.dat')[0]
    ict_file  = glob(data_directory+'/YAG1_M'+mval+'*.csv')[0] 
@@ -55,6 +60,7 @@ for i in range(200, 205, 5): #,205): #250,5):
    
    #Load images, do a charge cut
    (dx, dy, Nframes, image_array) = readimage(yag, header_size=3)
+   #view_each_frame(image_array)
 
    #Select only images with certain charge
    #usage = select_on_charge(images, charge, min_charge, max_charge)
@@ -83,9 +89,10 @@ for i in range(200, 205, 5): #,205): #250,5):
 
    #Crop images 
    x, y, z = di_images.shape
-   crop_array = np.zeros((400,400,z)) 
+   #usage = np.zeros((dy, dx, dz))
+   crop_array = np.zeros((350,350,z)) 
    for i in range(0,z):
-      crop_array[:,:,i] = crop_image(di_images[:,:,i], x_min=80, x_max=480, y_min=80, y_max=480)
+      crop_array[:,:,i] = crop_image(di_images[:,:,i], x_min=80, x_max=430, y_min=80, y_max=430)
 
    #view_each_frame(crop_array)
    ave_crop = average_images(crop_array)
@@ -99,5 +106,8 @@ for i in range(200, 205, 5): #,205): #250,5):
    #This gives array with x and y beam sizes 
    #Every beam size is recorded, not the average only
    #The arrays will be the same size as the amount of shots analyzed
-   beamsizes = fit_data(crop_array, fiducial, './output/beamsizes_'+key+'_M'+mval)
-   
+   #subtract base level?
+   test = crop_array - 10
+   #beamsizes = fit_data(crop_array, fiducial, './output/beamsizes_'+key+'_M'+mval)
+   #beamsizes = fit_data(test, fiducial, './output/beamsizes_'+key+'_M'+mval)
+  
