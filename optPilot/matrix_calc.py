@@ -10,11 +10,11 @@ l1  = Symbol('L1')
 
 #beam = Matrix([[1,l1], [0,1]])
 
-d1 = Matrix([[1,l1], [0,1]])
-d2 = Matrix([[1,l1], [0,1]])
-d3 = Matrix([[1,l1], [0,1]])
-d4 = Matrix([[1,l1], [0,1]])
-d5 = Matrix([[1,l1], [0,1]])
+d1 = Matrix([[1,2.82], [0,1]])
+d2 = Matrix([[1,0.25], [0,1]])
+d3 = Matrix([[1,0.25], [0,1]])
+d4 = Matrix([[1,0.25], [0,1]])
+d5 = Matrix([[1,2.0], [0,1]])
 
 quad1 = Matrix([[1,0], [f1,1]])
 quad2 = Matrix([[1,0], [f2,1]])
@@ -22,7 +22,7 @@ quad3 = Matrix([[1,0], [f3,1]])
 quad4 = Matrix([[1,0], [f4,1]])
 
 
-test = quad4*quad3*quad2*d1
+test = d5*quad4*d4*quad3*d3*quad2*d2*quad1*d1
 
-print(test)
-print(d1*d1)
+print(test[0,0])
+#print(d1*d1)
