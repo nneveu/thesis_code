@@ -11,8 +11,8 @@ def counts_to_current(counts):
     #given the counts for the EEX dipole 
     #on the drive line. 
     cal_counts  = np.array([1000.0,5000.0,10000.0,15000.0]) #These were measured
-    mv      = np.array([3.7,18.8,37.5,56.3]) #These were measured
-    ratio   = 25.0/100.0
+    meas_volts  = np.array([3.7,18.8,37.5,56.3]) #These were measured
+    ratio       = 25.0/100.0 #ratio of current/volts 
     cal_current = mv*ratio
 
     poly = np.polyfit(cal_counts, cal_current, 1)
@@ -44,10 +44,11 @@ leff = 0.3154
 rho = calc_rho(leff, angle)
 print "rho", rho 
 
-mean1       = np.mean([5826,5763])
+mean1       = np.mean([5826,5763]) #,5632 mediean 11/02
 mean2       = np.mean([10054,9921,9968,9926])
+#mean3      = np.mean([14688]) #bad measurement?
 mean3       = np.mean([14072,14083])
-mean3_highq = np.mean([13472,13792])
+mean3_highq = np.mean([13472,13792]) #13808 median 10/17])
 
 gun           = counts_to_energy(rho, 1472.0)#current_to_bfield(counts_to_current(1472.0))
 gun_l1l2      = counts_to_energy(rho, mean1)#current_to_bfield(counts_to_current(mean1))
