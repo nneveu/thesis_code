@@ -1,8 +1,12 @@
 from imageReader import *
-from chargeReader2 import *
+from chargeReader import *
 import numpy as np
 import matplotlib.pyplot as plt
 from glob import glob	
+
+def make_incrementor(n):
+    return lambda x: x + n
+
 #https://stackoverflow.com/questions/4843158/check-if-a-python-list-item-contains-a-string-inside-another-string
 
 #The following code  is used to do charge cut off
@@ -13,9 +17,10 @@ ict_files_sdds  = glob(data_directory+'/YAG1_M2*.csv')
 yag_backgrounds = glob(data_directory+'/YAG1_M2*background*.dat')
 yags            = glob(data_directory+'/YAG1_M2*2017_img.dat')
 
-#Load fiducial image
+
+#-------------------------------------------------------------------------
+#Load fiducial image, adjust YAG mask size
 (fx, fy, fz, fid_image) = readimage(fiducial_file, header_size=3)
-#Finding dimensions of YAG screen and fiducial
 circle_dim = circle_finder(fid_image, min_r=0.367, max_r=0.38)
 fiducial   = fiducial_calc(circle_dim['radius'])
 print('fiducial:', fiducial)
@@ -46,21 +51,23 @@ print('radius after', circle_dim['radius'])
 #   
 #   #print("YAG files:\n",yag,'\n', yag_back, '\n')
 #
-for i in range(205, 210, 5): #,205): #250,5):
+#-------------------------------------------------------------------------
+all_beamsizesx = np.zeros((10))
+all_beamsizesy = np.zeros((10))
+
+for n, i in enumerate(range(200, 250, 5)): #,205): #250,5):
+   print('\n\n')
    mval = str(i)
    yag       = glob(data_directory+'/YAG1_M'+mval+'*2017_img.dat')[0]
    ict_file  = glob(data_directory+'/YAG1_M'+mval+'*.csv')[0] 
    yag_back  = glob(data_directory+'/YAG1_M'+mval+'*background*.dat')[0]
-  
-   #SDDS
-   volts_array, time = csv_to_volts_array(ict_file)
-   #volts_array, cal = sdds_to_volts_array(ict_file)
-   charge_array, scaled_volts = ict_charge(volts_array, data_type='csv',time_array=time)
-   #plot_ict_curves(scaled_volts, time_array=time)
+ 
+   #-------------------------------------------------------------------------
+   #Get charges 
+   charge_array, scaled_volts = ict_charge(ict_file, data_type='csv')
    
    #Load images, do a charge cut
    (dx, dy, Nframes, image_array) = readimage(yag, header_size=3)
-   #view_each_frame(image_array)
 
    #Select only images with certain charge
    #usage = select_on_charge(images, charge, min_charge, max_charge)
@@ -76,16 +83,16 @@ for i in range(205, 210, 5): #,205): #250,5):
    #view_each_frame(mask_cut_images)
 
    #Clean up noise with median filter
-   di_background  = difilter(masked_background)
+   #background  = do_filter(masked_background)
    #Average background into one image 
-   ave_background = average_images(di_background)
+   ave_background = average_images(masked_background)
   
    #Subtract background
    no_background = background_subtraction(masked_charge_images, ave_background)
    #view_each_frame(no_background)
    
    #Apply median filter to all frames
-   di_images = difilter(no_background)
+   di_images = do_filter(no_background)
 
    #Crop images 
    x, y, z = di_images.shape
@@ -106,8 +113,11 @@ for i in range(205, 210, 5): #,205): #250,5):
    #This gives array with x and y beam sizes 
    #Every beam size is recorded, not the average only
    #The arrays will be the same size as the amount of shots analyzed
-   #subtract base level?
-   test = crop_array - 10
-   #beamsizes = fit_data(crop_array, fiducial, './output/beamsizes_'+key+'_M'+mval)
+   beamsizes = fit_gaussian(crop_array, fiducial, './output/beamsizes_'+key+'_M'+mval, clip_tail=80)
    #beamsizes = fit_data(test, fiducial, './output/beamsizes_'+key+'_M'+mval)
-  
+   all_beamsizesx[n] = np.average(beamsizes['sigmax'])
+   all_beamsizesy[n] = np.average(beamsizes['sigmay'])
+
+
+print(all_beamsizesx)
+print(all_beamsizesy)
