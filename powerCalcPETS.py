@@ -43,9 +43,7 @@ I   = Q/Tb  #Beam current
 #powertrain = ( (omega*(I**2.0)*rqd)/(4.0*vgd) )*(hold2**2)*(formfactor**2)*0.965
 #
 #electricField = np.sqrt( (rqa*powertrain*omega)/vga)
-#
 #gradient = electricField #in MV/m
-#
 #denergy = gradient*2*La #in MeV
 
 
