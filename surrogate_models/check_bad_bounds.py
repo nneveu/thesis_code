@@ -43,8 +43,8 @@ yNames   = ['emit_x', 'emit_y', 'emit_s', 'rms_x', 'rms_y', 'rms_s', 'energy', '
 # Note the 0 in the get functions denotes a generation 
 dbr       = mldb.mldb()
 dbr.load(baseFN+'_910.pk')
-#dbr.printOverview()
-uqdata = np.zeros([npts+1, 7])
+dbr.printOverview()
+uqdata = np.zeros([npts+1, 15])
 
 count = 0
 for i in range(0, dbr.getSampleSize()):
@@ -58,51 +58,88 @@ for i in range(0, dbr.getSampleSize()):
         #print('yes')
         #print(i, new[loc])
         uqdata[count,0] = dbr.getDVarVec(0,i)[0]
-        uqdata[count,1] = dbr.getObjVec(0,i)[1]
-        uqdata[count,2] = dbr.getObjVec(0,i)[2]
-        uqdata[count,3] = dbr.getObjVec(0,i)[3]
-        uqdata[count,4] = dbr.getObjVec(0,i)[4]
-        uqdata[count,5] = dbr.getObjVec(0,i)[5]
-        uqdata[count,6] = dbr.getObjVec(0,i)[6]
+        uqdata[count,1] = dbr.getDVarVec(0,i)[1]
+        uqdata[count,2] = dbr.getDVarVec(0,i)[2]
+        uqdata[count,3] = dbr.getDVarVec(0,i)[3]
+        uqdata[count,4] = dbr.getDVarVec(0,i)[4]
+        uqdata[count,5] = dbr.getDVarVec(0,i)[5]
+        uqdata[count,6] = dbr.getDVarVec(0,i)[6]
+
+        uqdata[count,7]  = dbr.getObjVec(0,i)[0]
+        uqdata[count,8]  = dbr.getObjVec(0,i)[1]
+        uqdata[count,9]  = dbr.getObjVec(0,i)[2]
+        uqdata[count,10] = dbr.getObjVec(0,i)[3]
+        uqdata[count,11] = dbr.getObjVec(0,i)[4]
+        uqdata[count,12] = dbr.getObjVec(0,i)[5]
+        uqdata[count,13] = dbr.getObjVec(0,i)[6]
+        uqdata[count,14] = dbr.getObjVec(0,i)[7]
+        #uqdata[count,15] = dbr.getObjVec(0,i)[9]
+
+
+
         count = count+1
 
 #print(uqdata[:,0][:3], data[:,0][:3])
-print(len(uqdata[:,0]))
+#print(any(uqdata[:,0]==0))
 
 
 #print(count)
-#data = [
-#    go.Parcoords(
-#        line = dict(color = 'blue'),
-#        dimensions = list([
-#            dict(range = [400,550],
-#                 #constraintrange = [1,2],
-#                 label = 'BF', values = bf),
-#
-#            dict(range = [150,280],
-#                 #tickvals = [1.5,3,4.5],
-#                 label = 'M', values = m),
-#
-#            dict(range = [-20,0],
-#                 label = 'P0', values = p0),
-#
-#            dict(range = [-20, 0],
-#                 label = 'P1', values = p1),
-#
-#            dict(range = [60, 75],
-#                 label = 'G0', values = g0),
-#
-#            dict(range = [15, 25],
-#                 label = 'G1', values = g1),
-#
-#            dict(range = [0.001, 0.004],
-#                 label = 'Rc',  values = rc),
-#
-#        ])
-#    )
-#]
+data2 = [
+    go.Parcoords(
+        line = dict(color = 'blue'),
+        dimensions = list([
+            dict(range = [400,550],
+                 #constraintrange = [1,2],
+                 label = 'BF', values = uqdata[:,0]),
 
-#plotly.offline.plot(data, filename = 'parcoord-dimensions')
+            dict(range = [150,280],
+                 #tickvals = [1.5,3,4.5],
+                 label = 'M', values = uqdata[:,1]),
+
+            dict(range = [-20,0],
+                 label = 'P0', values = uqdata[:,2]),
+
+            dict(range = [-20, 0],
+                 label = 'P1', values = uqdata[:,3]),
+
+            dict(range = [60, 75],
+                 label = 'G0', values = uqdata[:,4]),
+
+            dict(range = [15, 25],
+                 label = 'G1', values = uqdata[:,5]),
+
+            dict(range = [0.001, 0.004],
+                 label = 'Rc',  values = uqdata[:,6]),
+
+            dict(range = [1e-7,5e-6],
+                 label = 'xemit', values = uqdata[:,7]),
+#
+#            dict(range = [1e-7,5e-6],
+#                 label = 'yemit', values = uqdata[:,8]),
+#
+            dict(range = [1e-8,0.5e-6],
+                 label = 'zemit', values = uqdata[:,9]),
+
+            dict(range = [0.0, 0.001],
+                 label = 'rms_x',  values = uqdata[:,10]),
+#
+#            dict(range = [0.0, 0.001],
+#                 label = 'rms_y',  values = uqdata[:,11]),
+#
+            dict(range = [0.0, 0.0001],
+                 label = 'rms_s',  values = uqdata[:,12]),
+#
+            dict(range = [0, 0.5],
+                 label = 'E',  values = uqdata[:,13]),
+#
+            dict(range = [0, 0.1],
+                 label = 'dE',  values = uqdata[:,14]),
+
+        ])
+    )
+]
+
+plotly.offline.plot(data2, filename = 'parcoord-dimensions')
 
 
 #plt.plot(bf, '.')
