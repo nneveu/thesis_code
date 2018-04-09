@@ -23,11 +23,13 @@ def counts_to_current(counts):
 
 def current_to_bfield(current):
     #from gao's script to pull info from plot
+    #B in Tesla
     bfield = (180.9708*current - 7.2053)*10**-4
     return bfield
 
 def counts_to_energy(rho, counts):
     i = counts_to_current(counts)    
+    #B in Tesla
     bfield = current_to_bfield(i)
     energy = ((bfield*rho)/3.335641)*10**3
     return energy    
@@ -38,7 +40,7 @@ def total_energy(momentum):
     print( 'total energy', total_e)
     return total_e
 
-angle = 19 #degrees
+angle = 20 #19 #degrees
 leff = 0.3154
 
 rho = calc_rho(leff, angle)
