@@ -6,9 +6,8 @@ Created on Mon Feb 13 13:50:10 2017
 
 ombine 3D linac files from CST
 """
-import sys
-sys.path.append('/Users/nneveu/Desktop/Scripts/3druns')
 import linecache
+import numpy as np
 #==============================================================================
 # This function combines E and H CST files
 #==============================================================================
@@ -19,7 +18,7 @@ def CSTcombo(efilein, hfilein, ehfileout):
     ehout = open(ehfileout, 'w')
 
     #Starting at line #3 because CST file has 2 lines of header
-    for i in xrange(3, num_lines+1): 
+    for i in range(3, num_lines+1): 
         lineE = linecache.getline(efilein, i)
         lineH = linecache.getline(hfilein, i)
         #print lineE.split()[0]
@@ -49,11 +48,11 @@ def CSTcombo(efilein, hfilein, ehfileout):
 def CSTcomboxyz(efilein, hfilein, ehfileout):
 
     num_lines = sum(1 for line in open(efilein))
-    print num_lines
+    print (num_lines)
     #efin = open(efilein, 'r')
     ehout = open(ehfileout, 'w')
 
-    for i in xrange(3, num_lines+1): #smaller file 2539203): 
+    for i in range(3, num_lines+1): #smaller file 2539203): 
         lineE = linecache.getline(efilein, i)
         lineH = linecache.getline(hfilein, i)
         #print lineE.split()[0]
@@ -82,38 +81,27 @@ def CSTcomboxyz(efilein, hfilein, ehfileout):
     return num_lines
 
 
-def reorderCST(EHcombofile, reorderedFile, filetype):
+def reorderCST(EHcombofile, reorderedFile, freq, gridarray, dimarray):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #Step 2: 
     #	Write Header info
     #	This info needs to be adjusted by hand
+
+    freq = str(freq)
+    snx  = str(gridarray[0])
+    sny  = str(gridarray[1])
+    snz  = str(gridarray[2])
+
     reorder = open(reorderedFile, 'w')
     reorder.write('3DDynamic XYZ\n')
-    if filetype == 'linac':      
-        reorder.write('1300.341684\n')
-        reorder.write('-4.6 4.6 46\n')
-        reorder.write('-4.6 4.6 46\n')
-        reorder.write('0.0 120.0 1200\n')
-        
-        print('linac')
-        #Number of grid points in each dimension
-        #These need to be adjusted by hand
-        nx = 46 +1
-        ny = 46 +1
-        nz = 1200 +1
-    
-    elif filetype == 'gun':
-        print('gun')
-        #Number of grid points in each dimension
-        #These need to be adjusted by hand
-        reorder.write('1300.151204\n')
-        reorder.write('-2.5 2.5 80\n')
-        reorder.write('-2.5 2.5 80\n')
-        reorder.write('0.0 23.271 376\n')
-        
-        nx = 80 +1
-        ny = 80 +1
-        nz = 376 +1
+    reorder.write(freq+'\n')
+    reorder.write(dimarray[0]+' '+dimarray[1]+' '+snx+'\n')
+    reorder.write(dimarray[2]+' '+dimarray[3]+' '+sny+'\n')   
+    reorder.write(dimarray[4]+' '+dimarray[5]+' '+snz+'\n')   
+    #Number of grid points in each dimension
+    nx = gridarray[0] +1
+    ny = gridarray[1] +1
+    nz = gridarray[2] +1
         
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     #Step 3: 
@@ -130,22 +118,22 @@ def reorderCST(EHcombofile, reorderedFile, filetype):
     dy = ny
     dz = 1
 #==============================================================================
-#     for k in xrange(0,nx):
+#     for k in range(0,nx):
 #     	dlz = k*dz
 #     
-#     	for j in xrange(0, ny):
+#     	for j in range(0, ny):
 #     		dly = j*dy
 #     
-#     		for i in xrange(0,nz):
+#     		for i in range(0,nz):
 #     			dlx = i*dx
 #==============================================================================
-    for k in xrange(0,nx):
+    for k in range(0,nx):
         dlz = k*dz
 
-        for j in xrange(0, ny):
+        for j in range(0, ny):
             dly = j*dy
 
-            for i in xrange(0,nz):
+            for i in range(0,nz):
                dlx = i*dx
                zline = dlx + dly + dlz + 1
                reorder.write(linecache.getline(EHcombofile, zline))
@@ -159,15 +147,34 @@ def reorderCST(EHcombofile, reorderedFile, filetype):
 # #num_lines = CSTcomboxyz('field_files/e3D_gun_Zheng.txt', 'field_files/h3D_gun_Zheng.txt', 'test.txt')
 # reorderCST('hold.txt', 'DriveGun_3D.txt', 'gun')
 #==============================================================================
+#old Gun info
+#nx = 80 +1
+#ny = 80 +1  
+#nz = 376 +1 
+#reorder.write('1300.151204\n')
+#reorder.write('-2.5 2.5 80\n')
+#reorder.write('-2.5 2.5 80\n')
+#reorder.write('0.0 23.271 376\n')
 
-num_lines_linac = CSTcombo('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargeMeshZheng.txt', 'hold2.txt')
+#old Linac info
+#nx = 46 +1
+#ny = 46 +1
+#nz = 1200 +1
+#reorder.write('1300.341684\n')
+#reorder.write('-4.6 4.6 46\n')
+#reorder.write('-4.6 4.6 46\n')
+#reorder.write('0.0 120.0 1200\n')
+
 #num_lines = CSTcomboxyz('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargeMeshZheng.txt', 'test.txt')
-reorderCST('hold2.txt', 'DriveLinac_3D_2.txt', 'linac')
-
-
+#num_lines_linac = CSTcombo('field_files/e3d_LinacLargeMeshZheng.txt', 'field_files/h3d_LinacLargeMeshZheng.txt', 'hold2.txt')
+#reorderCST('hold2.txt', 'DriveLinac_3D_2.txt', 'linac')
 #num_lines = sum(1 for line in open('DriveLinac3D_CosMinusSin.txt'))
 
-
+#num_lines_linac = CSTcombo('6_SYMM_cav_WGshort_holes_Eigen_E.txt', '6_SYMM_cav_WGshort_holes_Eigen_H.txt', 'hold.txt')
+freq = 9410
+gridarray = np.array([20,20,1000])
+dimarray  = ['-2','2','-2','2','-5.1','323']
+reorderCST('hold.txt', 'EuclidGun_3D.txt', freq, gridarray, dimarray)
 
 
 
