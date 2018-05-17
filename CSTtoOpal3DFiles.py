@@ -8,6 +8,7 @@ ombine 3D linac files from CST
 """
 import linecache
 import numpy as np
+import matplotlib.pyplot as plt
 #==============================================================================
 # This function combines E and H CST files
 #==============================================================================
@@ -139,6 +140,26 @@ def reorderCST(EHcombofile, reorderedFile, freq, gridarray, dimarray):
                reorder.write(linecache.getline(EHcombofile, zline))
 
     reorder.close()
+
+def plotEz(efile, nx):
+    #plot Ez on axis from CST E file
+    ez = np.zeros(nx+1)
+    n  = 0
+    for line in open(efile):
+        sl = line.split() 
+        try:
+            if sl[0] == sl[1] =='0':
+                #print(line)
+                ez[n] = sl[5]
+                n = n+1
+        except:
+            print(line)
+
+    #print(ez)
+    plt.plot(ez)
+    plt.show()
+    return(ez)
+
 #==============================================================================
 # testing functions
 #==============================================================================
@@ -173,9 +194,9 @@ def reorderCST(EHcombofile, reorderedFile, freq, gridarray, dimarray):
 #num_lines_linac = CSTcombo('6_SYMM_cav_WGshort_holes_Eigen_E.txt', '6_SYMM_cav_WGshort_holes_Eigen_H.txt', 'hold.txt')
 freq = 9410
 gridarray = np.array([20,20,1000])
-dimarray  = ['-2','2','-2','2','-5.1','323']
-reorderCST('hold.txt', 'EuclidGun_3D.txt', freq, gridarray, dimarray)
-
+dimarray  = ['-0.2','0.2','-0.2','0.2','-0.51','32.3']
+#reorderCST('hold.txt', 'EuclidGun_3D.txt', freq, gridarray, dimarray)
+plotEz('6_SYMM_cav_WGshort_holes_Eigen_E.txt', 1000)
 
 
 
