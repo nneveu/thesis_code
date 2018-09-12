@@ -3,7 +3,7 @@ from chargeReader import *
 import numpy as np
 import matplotlib.pyplot as plt
 from glob import glob	
-from scipy import ndimage
+from scipy import ndimage, stats
 
 def make_incrementor(n):
  #https://stackoverflow.com/questions/4843158/check-if-a-python-list-item-contains-a-string-inside-another-string   
@@ -29,6 +29,7 @@ fiducial   = fiducial_calc(circle_dim['radius'])
 all_beamsizesx = np.zeros((10))
 all_beamsizesy = np.zeros((10))
 deflection = np.zeros((6))
+deviations = np.zeros((6))
 summary = 'beamsizes_kickerscan_high_charge_07-2018.txt'
 f = open(summary,'w')
 f.write('Npoints' + "\t"+ 'Kicker Voltage' + "\t" + 'sigmax_ave' + "\t" + 'sigmay_ave' + "\t" \
@@ -101,8 +102,9 @@ for n, i in enumerate(kicker_voltages):    #range(0, 1, 2)):
    #The arrays will be the same size as the amount of shots analyzed
    #beamsizes = fit_gaussian(crop_array, fiducial, './output/beamsizes_'+key+'_M'+mval, clip_tail=80)
    #This array has all values of sigmax and sigmay 
-   beamsizes, rx2, ry2 centroids= combo_model(crop_array, fiducial, './output3/beamsizes_'+key+'_K'+kval+'.pdf')
+   beamsizes, rx2, ry2, centroids= combo_model(crop_array, fiducial, './output3/beamsizes_'+key+'_K'+kval+'.pdf')
    deflection[n] = np.average(centroids['y'])
+   deviations[n] = np.std(centroids['y'])
 
    #Saving summary data to text file
    f.write(str(len(rx2))+ "\t" + str(i) + "\t"\
@@ -123,9 +125,27 @@ np.save('ybeamsizes_30nC.npy', all_beamsizesy)
 
 f.close()
 
+#fit_fn = np.poly1d(deflection) 
+# Generated linear fit
+slope, intercept, r_value, p_value, std_err = stats.linregress(kicker_voltages,deflection)
+line = slope*kicker_voltages+intercept
+print('r_value', r_value, 'std_err', std_err)
 
-plt.plot(kicker_voltages, ycentroids)
-plt.show()
+xoffset    = deflection[1:] - deflection[0] 
+print(np.abs(xoffset))
+angles     = np.arcsin(np.abs(xoffset/1000))
+angles_deg = (180.0/np.pi)*angles
+print('angle estimate',  angles_deg)
+print('deviations for plot', deviations)
+
+plt.title('Kicker Deflection, $30 \pm 0.5$ nC Beam', size=20)
+plt.xlabel('Kicker Voltage [kV]', size=18)
+plt.ylabel('Beam Centroid \non YAG Screen [mm]', size=18)
+plt.errorbar(kicker_voltages, deflection, deviations, fmt='bo', markersize=3, label='Data')
+plt.plot(kicker_voltages, line, 'k--', label='Linear Fit')
+plt.legend(loc='upper right')
+plt.grid('on')
+plt.savefig('kicker_linearity.pdf', dpi=1000, bbox_inches='tight')
 #while count == 0:
 #for ict_file in ict_file_sdds:
 #   print('\n\nCharge file:\n', ict_file) 
