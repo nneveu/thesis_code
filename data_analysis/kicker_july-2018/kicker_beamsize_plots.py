@@ -8,14 +8,16 @@ sys.path.append('/home/nicole/Documents/thesis_code')
 import myplots as mplt
 from opal.visualization.plots import *
 from opal.opal import load_dataset
-
+import itertools
 
 matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('ytick', labelsize=18) 
 
-files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/statfiles/*.stat') #'optLinac-40nC_KQ3=3.2_IM=250.stat']
-data_x = np.zeros((len(files)))
-data_y = data_x
+files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/*.stat') #'optLinac-40nC_KQ3=3.2_IM=250.stat']
+numfiles = len(files)
+data_x = np.zeros((numfiles))
+data_y = np.zeros((numfiles))
+sangle = np.zeros((numfiles))
 print(files)
 for i, myfile in enumerate(files):
     try:
@@ -24,8 +26,11 @@ for i, myfile in enumerate(files):
     except Exception as e:
         print ( e )
 
+    statangle = myfile.split('=')[1]
+    sangle[i] = float(statangle.split('.stat')[0])
+
     s = ds.getData('s')
-    ind = np.where(s>17.5)[0][0]
+    ind = np.where(s>17.8)[0][0]
     print(s[ind])
     xrms = ds.getData('rms_x')
     yrms = ds.getData('rms_y')
@@ -33,8 +38,7 @@ for i, myfile in enumerate(files):
     data_x[i] = xrms[ind]
     data_y[i] = yrms[ind]
 
-sangle = np.array((0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25))
-
+print(sangle)
 #Data
 high_charge = np.loadtxt('beamsizes_kickerscan_high_charge_07-2018.txt', skiprows=1)
 
@@ -58,15 +62,23 @@ print(np.shape(data_angles_deg))
 #major_ticks = np.arange(0, 20, 5)                                              
 #minor_ticks = np.arange(0, 101, 5)  
 
+p = sangle.argsort()
+sangle = sangle[p]
+data_x = data_x[p]
+data_y = data_y[p]
+
+print(data_x, data_y, sangle)
+
 plt.figure(1)
 plt.title('$30 \pm 0.5$nC Beam Size: $\sigma_{x,y}$', size=20)
-plt.xlabel('Kicker Strength [Amps]', size=20)
+plt.xlabel('Kicker Angle [deg]', size=20)
 plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
-plt.plot(sangle, data_x*10**3 , 'b-', label = 'Simulation 3D $\sigma_x$')
-plt.plot(sangle, data_y*10**3, 'k-', label = 'Simulation 3D $\sigma_y$') 
-plt.errorbar(data_angles_deg, sigy_high_data, sigy_std_data, fmt='ko--', markersize=3, label='Data $\sigma_y$')
-plt.errorbar(data_angles_deg, sigx_high_data, sigx_std_data, fmt='bo--', markersize=3, label='Data $\sigma_x$')
-plt.legend(loc='best', prop={'size': 16})
+plt.plot(sangle, data_x*10**3 , 'k--', label = 'Simulation 3D $\sigma_x$', alpha=0.6)
+plt.plot(sangle, data_y*10**3, 'b--', label = 'Simulation 3D $\sigma_y$', alpha=0.6) 
+#Note y and x are flipped because of camera orientation
+plt.errorbar(data_angles_deg, sigy_high_data, sigy_std_data, fmt='ko--', markersize=3, label='Data $\sigma_x$')
+plt.errorbar(data_angles_deg, sigx_high_data, sigx_std_data, fmt='bo', markersize=3, label='Data $\sigma_y$')
+plt.legend(loc='upper right', prop={'size': 16}, bbox_to_anchor=(1.6, 1))
 #plt.axis([190,260, 0, 5])
 plt.minorticks_on()
 plt.grid(True)#, which='both', color = '0.75', linestyle='--')
