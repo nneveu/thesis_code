@@ -80,27 +80,3 @@ plt.savefig('kicker_angle_comparison.pdf', dpi=1000, bbox_inches='tight')
 
 
 
-
-
-
-
-
-
-
-
-
-
-plt.figure(3)
-plt.title('$30 \pm 0.5$nC Beam Size: $\sigma_{x,y}$', size=20)
-plt.xlabel('Kicker Strength [Amps]', size=20)
-plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
-plt.plot(sangle, data_x*10**3 , 'g-', label = 'Simulation 3D $\sigma_x$')
-plt.plot(sangle, data_y*10**3, 'k--', label = 'Simulation 3D $\sigma_y$')
-plt.errorbar(kval_high_data, sigy_high_data, sigy_std_data, fmt='ko--', markersize=3, label='Data $\sigma_y$')
-plt.errorbar(kval_high_data, sigx_high_data, sigx_std_data, fmt='bo--', markersize=3, label='Data $\sigma_x$')
-plt.legend(loc='best', prop={'size': 16})
-#plt.axis([190,260, 0, 5])
-plt.minorticks_on()
-plt.grid(True)#, which='both', color = '0.75', linestyle='--')
-plt.savefig('xybeamsizes_high_charge_kicker_scan_angle.pdf', dpi=1000, bbox_inches='tight')
-
