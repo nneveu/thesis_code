@@ -19,7 +19,7 @@ ict_files_sdds  = glob(data_directory+'/high_charge_YAG6_*kV*.sdds')
 yags            = glob(data_directory+'/high_charge_YAG6_*kV*2018.dat')
 
 #-------------------------------------------------------------------------
-#Load fiducial image, adjust YAG mask size (nov data)
+#Load fiducial image, adjust YAG mask size (july data)
 (fx, fy, fz, fid_image) = readimage(fiducial_file, header_size=6)
 circle_dim = circle_finder(fid_image, min_r=0.15, max_r=0.2, showcircle=False)
 #circle_dim = circle_finder(test, min_r=0.37, max_r=0.4)

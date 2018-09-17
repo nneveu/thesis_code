@@ -97,9 +97,35 @@ plt.grid(True)#, which='both', color = '0.75', linestyle='--')
 plt.savefig('xybeamsizes_high_charge_kicker_scan_voltage.pdf', dpi=1000, bbox_inches='tight')
 
 
+########################## YAG plots##########################
+stat = files[5]
+print(stat)
 
+statdata = load_dataset('./', fname=stat)            
+statds   = statdata[0]
+zstat    = ds.getData('s')
+statxrms = ds.getData('rms_x')
+statyrms = ds.getData('rms_y')
 
+data = np.loadtxt('beamsizes_beamline_high_charge_07-2018.txt', skiprows=1)
 
+sigx  = data[:,1]
+sigy  = data[:,2]
+devx  = data[:,3]
+devy  = data[:,4]
+zvals = np.array((11.477, 17.8, 20.0))
+
+plt.figure(3)
+plt.title('$30 \pm 0.5$nC Beam Size: $\sigma_{x,y}$', size=20) 
+plt.xlabel('Kicker Angle [deg]', size=20)
+plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
+plt.errorbar(zvals, sigy, devy, fmt='ko--', markersize=3, label='Data $\sigma_y$')
+plt.errorbar(zvals, sigx, devx, fmt='bo--', markersize=3, label='Data $\sigma_x$')
+plt.plot(zstat, statxrms*10**3, 'k-', label='Simulation 3D $\sigma_x$')
+plt.plot(zstat, statyrms*10**3, 'b-', label='Simulation 3D $\sigma_y$')
+plt.grid(True)
+plt.legend(loc='best')
+plt.savefig('stat_comparison_kicker.pdf')
 
 
 
