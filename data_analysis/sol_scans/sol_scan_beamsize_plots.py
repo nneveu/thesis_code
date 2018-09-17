@@ -13,7 +13,7 @@ matplotlib.rc('ytick', labelsize=18)
 opal1 = mplt.load('optLinac_M185_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat') #_3D.stat')
 opal2 = mplt.load('optLinac_M250_GPhase-20_R8.5mm_FWHM1.5e-12_L1-L6_0_3D.stat') #_3D.stat') 
 
-beamfiles = glob('beamsizes*.npy')
+beamfiles = glob('./output/1nC/*beamsizes_1nC.npy')
 n_points  = len(beamfiles)
 #https://stackoverflow.com/questions/4836710/does-python-have-a-built-in-function-for-string-natural-sort
 natsorted(beamfiles, key=lambda y: y.lower())
