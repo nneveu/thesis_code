@@ -12,12 +12,15 @@ voltage2 = np.array((18.0, 20.0,22.0, 24.0, 26.0, 28.0, 30.0))
 xoffset = np.array((16.08281818, 18.39087455, 21.31531992, 23.58201852, 25.49657292))
 deviations = np.array((0.71676416,  0.66506895, 0.74493582, 0.91352114, 0.49975501))
 #Calculating angles
-data_angles  = np.arcsin(np.abs(xoffset/1000))
+#data_angles  = np.arcsin(np.abs(xoffset/1000))
+data_angles  = np.arctan(np.abs(xoffset/1300))
 data_angles_deg = (180.0/np.pi)*data_angles
-angle_deviations = (180.0/np.pi)*(np.arcsin(np.abs(deviations/1000)))
+#angle_deviations = (180.0/np.pi)*(np.arcsin(np.abs(deviations/1000)))
+angle_deviations = (180.0/np.pi)*(np.arctan(np.abs(deviations/1300)))
+
 #predicted angles:
 L = 1.0 #m
-h = 0.0447 #m
+h = 0.05#0.0447 #m
 #const = L/h
 #angle75 = const*((voltage*10**3.0)/(75.0*10**6))*2
 #angle65 = const*((voltage*10**3.0)/(65.0*10**6))*2

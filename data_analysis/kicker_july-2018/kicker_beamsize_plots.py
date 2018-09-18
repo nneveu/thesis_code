@@ -13,7 +13,7 @@ import itertools
 matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('ytick', labelsize=18) 
 
-files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/*.stat') #'optLinac-40nC_KQ3=3.2_IM=250.stat']
+files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/M282/*.stat') #'optLinac-40nC_KQ3=3.2_IM=250.stat']
 numfiles = len(files)
 data_x = np.zeros((numfiles))
 data_y = np.zeros((numfiles))
@@ -76,7 +76,7 @@ plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
 plt.plot(sangle, data_x*10**3 , 'k--', label = 'Simulation 3D $\sigma_x$', alpha=0.6)
 plt.plot(sangle, data_y*10**3, 'b--', label = 'Simulation 3D $\sigma_y$', alpha=0.6) 
 #Note y and x are flipped because of camera orientation
-plt.errorbar(data_angles_deg, sigy_high_data, sigy_std_data, fmt='ko--', markersize=3, label='Data $\sigma_x$')
+plt.errorbar(data_angles_deg, sigy_high_data, sigy_std_data, fmt='ko', markersize=3, label='Data $\sigma_x$')
 plt.errorbar(data_angles_deg, sigx_high_data, sigx_std_data, fmt='bo', markersize=3, label='Data $\sigma_y$')
 plt.legend(loc='upper right', prop={'size': 16}, bbox_to_anchor=(1.6, 1))
 #plt.axis([190,260, 0, 5])
