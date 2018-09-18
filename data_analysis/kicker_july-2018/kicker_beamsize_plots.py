@@ -53,9 +53,10 @@ voltage = np.array((0, 18.0, 20.0,22.0, 24.0, 26.0))
 xoffset = np.array((0, 16.08281818, 18.39087455, 21.31531992, 23.58201852, 25.49657292))
 deviations = np.array((0, 0.71676416,  0.66506895, 0.74493582, 0.91352114, 0.49975501))
 #Calculating angles
-data_angles  = np.arcsin(np.abs(xoffset/1000))
+#data_angles  = np.arcsin(np.abs(xoffset/1000))
+data_angles = xoffset/780
 data_angles_deg = (180.0/np.pi)*data_angles
-angle_deviations = (180.0/np.pi)*(np.arcsin(np.abs(deviations/1000)))
+angle_deviations = (180.0/np.pi)*(xoffset/780)#(np.arcsin(np.abs(deviations/1000)))
 print(np.shape(data_angles_deg))
 
 ##Simulations
