@@ -13,7 +13,21 @@ import itertools
 matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('ytick', labelsize=18) 
 
-files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/M282/*.stat') #'optLinac-40nC_KQ3=3.2_IM=250.stat']
+#files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/symmetric_rad/*.stat') #M282/*.stat') #'optLinac-40nC_KQ3=3.2_IM=250.stat']
+#data_x, data_y, angle:
+#[ 0.00057999  0.00058079  0.00058178  0.00058297  0.00058435  0.00058592  0.00058769  0.00058964] 
+#[ 0.00070934  0.00070934  0.00070933  0.00070931  0.00070928  0.00070925  0.00070921  0.00070916] 
+#[ 0.25  0.5   0.75  1.    1.25  1.5   1.75  2.  ]
+
+
+#files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/asymmetric_rad/G64/*.stat') #M282/*.stat') #'optLinac-40nC_KQ3=3.2_IM=250.stat']
+#data_x, data_y, angle:
+#[ 0.00047713  0.00047814  0.00047939  0.00048088  0.00048261  0.00048458  0.0004892 ] 
+#[ 0.00076796  0.00076796  0.00076795  0.00076792  0.0007679   0.00076786  0.00076776] 
+#[ 0.25  0.5   0.75  1.    1.25  1.5   2.  ]
+
+files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/asymmetric_rad/GV55/*.stat')
+
 numfiles = len(files)
 data_x = np.zeros((numfiles))
 data_y = np.zeros((numfiles))
@@ -25,12 +39,13 @@ for i, myfile in enumerate(files):
         ds = dsets[0]
     except Exception as e:
         print ( e )
-
-    statangle = myfile.split('=')[1]
+    
+    print(myfile.split('=')[2])
+    statangle = myfile.split('=')[2]
     sangle[i] = float(statangle.split('.stat')[0])
 
     s = ds.getData('s')
-    ind = np.where(s>17.8)[0][0]
+    ind = np.where(s>17.78)[0][0]
     print(s[ind])
     xrms = ds.getData('rms_x')
     yrms = ds.getData('rms_y')
@@ -74,8 +89,10 @@ plt.figure(1)
 plt.title('$30 \pm 0.5$nC Beam Size: $\sigma_{x,y}$', size=20)
 plt.xlabel('Kicker Angle [deg]', size=20)
 plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
-plt.plot(sangle, data_x*10**3 , 'k--', label = 'Simulation 3D $\sigma_x$', alpha=0.6)
-plt.plot(sangle, data_y*10**3, 'b--', label = 'Simulation 3D $\sigma_y$', alpha=0.6) 
+plt.plot(sangle, data_x*10**3 , 'k--', label = 'Asymmetric Laser Simulation 3D $\sigma_x$', alpha=0.6)
+plt.plot(sangle, data_y*10**3, 'b--', label = 'Asymmetric Laser Simulation 3D $\sigma_y$', alpha=0.6) 
+#plt.plot(sangle, sdata_x*10**3 , 'k--', label = 'Symmetric Laser Simulation 3D $\sigma_x$', alpha=0.6)
+#plt.plot(sangle, sdata_y*10**3, 'b--', label = 'Symmetric Laser Simulation 3D $\sigma_y$', alpha=0.6) 
 #Note y and x are flipped because of camera orientation
 plt.errorbar(data_angles_deg, sigy_high_data, sigy_std_data, fmt='ko', markersize=3, label='Data $\sigma_x$')
 plt.errorbar(data_angles_deg, sigx_high_data, sigx_std_data, fmt='bo', markersize=3, label='Data $\sigma_y$')
@@ -83,11 +100,11 @@ plt.legend(loc='upper right', prop={'size': 16}, bbox_to_anchor=(1.6, 1))
 #plt.axis([190,260, 0, 5])
 plt.minorticks_on()
 plt.grid(True)#, which='both', color = '0.75', linestyle='--')
-plt.savefig('xybeamsizes_high_charge_kicker_scan_angle.pdf', dpi=1000, bbox_inches='tight')
+plt.savefig('xybeamsizes_high_charge_kicker_scan_angle_symmetric.pdf', dpi=1000, bbox_inches='tight')
 
 plt.figure(2)
 plt.title('$30 \pm 0.5$nC Beam Size: $\sigma_{x,y}$', size=20)
-plt.xlabel('Kicker Strength [Amps]', size=20)
+plt.xlabel('Kicker Strength [V]', size=20)
 plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
 plt.errorbar(kval_high_data, sigy_high_data, sigy_std_data, fmt='ko--', markersize=3, label='Data $\sigma_y$')
 plt.errorbar(kval_high_data, sigx_high_data, sigx_std_data, fmt='bo--', markersize=3, label='Data $\sigma_x$')
