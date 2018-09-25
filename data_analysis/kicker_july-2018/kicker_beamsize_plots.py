@@ -26,7 +26,12 @@ matplotlib.rc('ytick', labelsize=18)
 #[ 0.00076796  0.00076796  0.00076795  0.00076792  0.0007679   0.00076786  0.00076776] 
 #[ 0.25  0.5   0.75  1.    1.25  1.5   2.  ]
 
-files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/asymmetric_rad/GV55/*.stat')
+files = glob('../../../awa-tba/run_opt_params/experiment_comparison_30nC/3D/asymmetric_rad/G55/*.stat')
+#[ 0.00192656  0.00192642  0.0019263   0.00192614  0.00192609  0.00192606  0.00192606  0.00192608] 
+#[ 0.00102588  0.00102587  0.00102585  0.00102577  0.00102571  0.00102563  0.00102554  0.00102544] 
+#[ 0.01  0.25  0.5   1.    1.25  1.5   1.75  2.  ]
+
+
 
 numfiles = len(files)
 data_x = np.zeros((numfiles))
@@ -40,8 +45,8 @@ for i, myfile in enumerate(files):
     except Exception as e:
         print ( e )
     
-    print(myfile.split('=')[2])
-    statangle = myfile.split('=')[2]
+    print(myfile.split('=')[3]) #2])
+    statangle = myfile.split('=')[3] #2]
     sangle[i] = float(statangle.split('.stat')[0])
 
     s = ds.getData('s')
@@ -86,11 +91,11 @@ data_y = data_y[p]
 print(data_x, data_y, sangle)
 
 plt.figure(1)
-plt.title('$30 \pm 0.5$nC Beam Size: $\sigma_{x,y}$', size=20)
+plt.title('$30 \pm 0.5$nC, Energy ~62 MeV', size=20)
 plt.xlabel('Kicker Angle [deg]', size=20)
 plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
-plt.plot(sangle, data_x*10**3 , 'k--', label = 'Asymmetric Laser Simulation 3D $\sigma_x$', alpha=0.6)
-plt.plot(sangle, data_y*10**3, 'b--', label = 'Asymmetric Laser Simulation 3D $\sigma_y$', alpha=0.6) 
+plt.plot(sangle, data_x*10**3 , 'k--', label = 'Simulation 3D $\sigma_x$', alpha=0.6)
+plt.plot(sangle, data_y*10**3, 'b--', label = 'Simulation 3D $\sigma_y$', alpha=0.6) 
 #plt.plot(sangle, sdata_x*10**3 , 'k--', label = 'Symmetric Laser Simulation 3D $\sigma_x$', alpha=0.6)
 #plt.plot(sangle, sdata_y*10**3, 'b--', label = 'Symmetric Laser Simulation 3D $\sigma_y$', alpha=0.6) 
 #Note y and x are flipped because of camera orientation
@@ -100,10 +105,10 @@ plt.legend(loc='upper right', prop={'size': 16}, bbox_to_anchor=(1.6, 1))
 #plt.axis([190,260, 0, 5])
 plt.minorticks_on()
 plt.grid(True)#, which='both', color = '0.75', linestyle='--')
-plt.savefig('xybeamsizes_high_charge_kicker_scan_angle_symmetric.pdf', dpi=1000, bbox_inches='tight')
+plt.savefig('xybeamsizes_high_charge_kicker_scan_angle_asymmetric.pdf', dpi=1000, bbox_inches='tight')
 
 plt.figure(2)
-plt.title('$30 \pm 0.5$nC Beam Size: $\sigma_{x,y}$', size=20)
+plt.title('$30 \pm 0.5$nC, Energy ~62 MeV', size=20)
 plt.xlabel('Kicker Strength [V]', size=20)
 plt.ylabel('$\sigma_{x,y}$ [mm]', size=20)
 plt.errorbar(kval_high_data, sigy_high_data, sigy_std_data, fmt='ko--', markersize=3, label='Data $\sigma_y$')

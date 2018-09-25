@@ -35,21 +35,21 @@ h = 0.0447 #m
 #deg65 = angle65*(180/np.pi)
 yagL   = 0.28 #Center of yag chamber is ~280 mm from end of plates
 const  = L/h
-e75 = np.array([75.0]) *10**6
-e65 = np.array([65.0]) *10**6
+e55 = np.array([55.0]) *10**6
+e65 = np.array([62.0]) *10**6
 
-deg75 = const*(2*voltage2*10**3/e75)*(180/np.pi)*2
+deg55 = const*(2*voltage2*10**3/e55)*(180/np.pi)*2
 deg65 = const*(2*voltage2*10**3/e65)*(180/np.pi)*2
 
 print(const)
-radtotal75 = const*(2*voltage2*10**3/e75)*2
+radtotal55 = const*(2*voltage2*10**3/e55)*2
 radtotal65 = const*(2*voltage2*10**3/e65)*2
 
-xoffset75 = (1-np.cos(radtotal75))*(L/radtotal75)*10**3 + yagL*np.tan(radtotal75)*10**3#L/radtotal = rho
+xoffset55 = (1-np.cos(radtotal55))*(L/radtotal55)*10**3 + yagL*np.tan(radtotal55)*10**3#L/radtotal = rho
 xoffset65 = (1-np.cos(radtotal65))*(L/radtotal65)*10**3 + yagL*np.tan(radtotal65)*10**3
 
-print(deg75, '\n', deg65)
-print(deg65-deg75)
+print(deg55, '\n', deg65)
+print(deg65-deg55)
 
 plt.figure(1)
 plt.title('Kicker Deflection, $30 \pm 0.5$ nC Beam', size=20)
@@ -57,7 +57,7 @@ plt.xlabel('Kicker Voltage [kV]', size=18)
 plt.ylabel('Horizontal Deflection [mm]', size=18)
 plt.errorbar(voltage, xoffset, deviations, fmt='bo', markersize=3, label='Data')
 #plt.plot(voltage, line, 'k--', label='Linear Fit')
-plt.plot(voltage2, xoffset75, 'b.-', label='75 MeV, Calculated')
+plt.plot(voltage2, xoffset55, 'b.-', label='75 MeV, Calculated')
 plt.plot(voltage2, xoffset65, 'y--', label='65 Mev, Calculated')
 plt.legend(loc='lower right')
 plt.grid('on')
@@ -74,8 +74,7 @@ plt.title('Kicker Angle, $30 \pm 0.5$ nC Beam', size=20)
 plt.xlabel('Kicker Voltage [kV]', size=18)
 plt.ylabel('Deflection Angle [deg]', size=18)
 plt.errorbar(voltage, data_angles_deg, angle_deviations, fmt='bo', markersize=3, label='Data')
-#plt.plot(voltage2, deg75, 'b:', label='75 MeV, Calculated')
-plt.plot(voltage2, deg65, 'k-', label='65 Mev, Calculated')
+plt.plot(voltage2, deg65, 'k-', label='62 Mev, Calculated')
 plt.plot(voltage2, line, 'b--', label='Linear Fit', alpha=0.3)
 plt.legend(loc='lower right')
 plt.grid('on')
